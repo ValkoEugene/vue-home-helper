@@ -1,0 +1,52 @@
+.ml-15 {
+  margin-left: 15px;
+}
+
+.mr-15 {
+  margin-right: 15px;
+}
+
+.mb-15 {
+  margin-bottom: 15px;
+}
+
+input:not([type='number']), textarea {
+  margin-bottom: 15px;
+}
+
+textarea {
+  color: inherit;
+  position: relative;
+  padding: .4rem;
+  border-radius: 5px;
+  border: 1px solid rgba(0,0,0,.2);
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-box-shadow: 0 0 0 0 rgba(0,0,0,.15);
+  box-shadow: 0 0 0 0 rgba(0,0,0,.15);
+  -webkit-transition: all .3s ease;
+  transition: all .3s ease;
+  width: 100%;
+}
+textarea:focus {
+  box-shadow: 0 3px 10px 0 rgba(0,0,0,.15);
+  border: 1px solid #1f74ff!important;
+}
+
+.vs-con-input-label, .input-select {
+  width: 100%;
+}
+
+.home-helper__wrapper {
+  width: 80%;
+  margin: auto;
+  margin-top: 25px;
+}
+
+.con-select .icon-select {
+  top: 16px;
+}
+
+.vs-card {
+  margin-bottom: 25px!important;
+}

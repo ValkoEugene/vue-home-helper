@@ -1,0 +1,58 @@
+<template>
+  <div class="home-helper__wrapper">
+    <h1>Вход</h1>
+
+    <router-link to="/signin">
+      Зарегистрироваться
+    </router-link>
+    
+
+    <vs-input
+      vs-label="Email"
+      vs-type="text"
+      v-model.trim="email"
+    />
+
+    <vs-input
+      vs-label="Пароль"
+      vs-type="password"
+      v-model.trim="password"
+    />
+
+    <vs-button
+      vs-color="primary"
+      vs-type="filled"
+      @click="login"
+    >
+      Войти
+    </vs-button>
+  </div>
+</template>
+
+<script>
+import firebase from 'firebase'
+
+export default {
+  name: 'Login',
+  data: () => ({
+    email: '',
+    password: ''
+  }),
+  methods: {
+
+
+    login() {
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(this.email, this.password)
+        .then(
+          user => {
+            console.log('user login', user)
+            this.$router.replace('/')
+          },
+          error => console.error('Ooops', error)
+        )
+    }
+  }
+}
+</script>
