@@ -1,67 +1,75 @@
 <template>
   <div class="home-helper__wrapper">
-    <router-link to="/login">
-      Вход
-    </router-link>
+    <h1>Регистрация нового аккаунта</h1>
 
-    <!-- create user -->
-    <div v-if="!userCreate">
-      <h1>Регистрация нового аккаунта</h1>
+    <vs-card>
+      <vs-card-body>
 
-      <vs-input
-        vs-label="Email"
-        vs-type="text"
-        v-model.trim="email"
-      />
+        <router-link to="/login">
+          Вход
+        </router-link>
 
-      <vs-input
-        vs-label="Пароль"
-        vs-type="password"
-        v-model.trim="password"
-      />
+        <!-- create user -->
+        <div v-if="!userCreate">
+          <h3>Создание аккаунта</h3>
 
-      <vs-button
-        vs-color="primary"
-        vs-type="filled"
-        @click="signIn"
-      >
-        Создать аккаунт
-      </vs-button>
-    </div>
-    <!-- /create user -->
+          <vs-input
+            vs-label="Email"
+            vs-type="text"
+            v-model.trim="email"
+          />
 
-    <!-- create user in db -->
-    <div v-else>
-      <h1>Заполните информацию о себе</h1>
+          <vs-input
+            vs-label="Пароль"
+            vs-type="password"
+            v-model.trim="password"
+          />
 
-      <vs-input
-        vs-label="Имя"
-        vs-type="text"
-        v-model.trim="name"
-      />
+          <vs-button
+            vs-color="primary"
+            vs-type="filled"
+            @click="signIn"
+          >
+            Создать аккаунт
+          </vs-button>
+        </div>
+        <!-- /create user -->
 
-      <vs-select
-        class="selectExample"
-        vs-label="Тип аккаунта"
-        v-model="accountType"
-      >
-        <vs-select-item
-          v-for="item in accountTypes"
-          :key="item.value"
-          :vs-value="item.value"
-          :vs-text="item.text"
-        />
-      </vs-select>
+        <!-- create user in db -->
+        <div v-else>
+          <h3>Заполните информацию о себе</h3>
 
-      <vs-button
-        vs-color="primary"
-        vs-type="filled"
-        @click="createUserInBd"
-      >
-        Сохранить
-      </vs-button>
-    </div>
-    <!-- /create user in db -->
+          <vs-input
+            vs-label="Имя"
+            vs-type="text"
+            v-model.trim="name"
+          />
+
+          <vs-select
+            class="selectExample"
+            vs-label="Тип аккаунта"
+            v-model="accountType"
+          >
+            <vs-select-item
+              v-for="item in accountTypes"
+              :key="item.value"
+              :vs-value="item.value"
+              :vs-text="item.text"
+            />
+          </vs-select>
+
+          <vs-button
+            vs-color="primary"
+            vs-type="filled"
+            @click="createUserInBd"
+          >
+            Сохранить
+          </vs-button>
+        </div>
+        <!-- /create user in db -->
+
+      </vs-card-body>
+    </vs-card>
 
   </div>
 </template>

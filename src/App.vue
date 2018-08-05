@@ -4,6 +4,8 @@
     <vs-topbar vs-color="primary" class="menu">
       <div class="homehelper-topbar">
         <h4 class="ml-15 mr-15">Home helper</h4>
+        
+        <vs-avatar vs-size="small" :vs-text="userName"/>
 
         <vs-button
           vs-color-text="rgb(255, 255, 255)"
@@ -103,6 +105,10 @@ export default {
   computed: {
     userId() {
       return this.$store.state.user.uid
+    },
+
+    userName() {
+      return this.$store.getters.userName
     }
   },
   methods: {

@@ -1,3 +1,5 @@
+<!-- Компонент создания отклика к заявке -->
+
 <template>
   <vs-card>
     <vs-card-header vs-title="Ваше предложение" />
@@ -35,31 +37,41 @@
 
 <script>
 import db from '../plugins/firebaseInit.js'
+// Плагин по работе с датами
 import dayjs from 'dayjs'
 
 export default {
   name: 'CreateOffer',
   props: {
+    // Id заявки
     issueId: {
       type: String,
       required: true
     }
   },
   data: () => ({
+    // Заголовок отклика
     title: '',
+    
+    // Описание отклика
     description: '',
+
+    // Предлагаемая цена за услугу
     price: ''
   }),
   computed: {
+    // Имя автора отклика
     author() {
-      return this.$store.state.user.name || this.$store.state.user.author
+      return this.$store.getters.userName
     },
 
+    // Id автора отклика
     authorId() {
       return this.$store.getters.userId
     }
   },
   methods: {
+    // Создаем отклик
     addOffer() {
       const data = {
         title: this.title,

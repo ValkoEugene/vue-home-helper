@@ -64,11 +64,22 @@ export default {
     Datepicker: () => import('vuejs-datepicker')
   },
   data: () => ({
+    // Локализация дат
     russianLocale: ru,
+
+    // Название заявки
     name: '',
+    
+    // Адрес
     address: '',
+
+    // Описание
     description: '',
+
+    // Дата выполнения
     selectDate: '',
+
+    // Тип заявки
     type: '',
 
     types: [

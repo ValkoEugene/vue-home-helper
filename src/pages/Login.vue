@@ -2,30 +2,37 @@
   <div class="home-helper__wrapper">
     <h1>Вход</h1>
 
-    <router-link to="/signin">
-      Зарегистрироваться
-    </router-link>
-    
+    <vs-card>
+      <vs-card-body>
 
-    <vs-input
-      vs-label="Email"
-      vs-type="text"
-      v-model.trim="email"
-    />
+        <router-link to="/signin">
+          Зарегистрироваться
+        </router-link>
+        
 
-    <vs-input
-      vs-label="Пароль"
-      vs-type="password"
-      v-model.trim="password"
-    />
+        <vs-input
+          vs-label="Email"
+          vs-type="text"
+          v-model.trim="email"
+        />
 
-    <vs-button
-      vs-color="primary"
-      vs-type="filled"
-      @click="login"
-    >
-      Войти
-    </vs-button>
+        <vs-input
+          vs-label="Пароль"
+          vs-type="password"
+          v-model.trim="password"
+        />
+
+        <vs-button
+          vs-color="primary"
+          vs-type="filled"
+          @click="login"
+        >
+          Войти
+        </vs-button>
+        
+      </vs-card-body>
+    </vs-card>
+
   </div>
 </template>
 
@@ -39,8 +46,6 @@ export default {
     password: ''
   }),
   methods: {
-
-
     login() {
       firebase
         .auth()

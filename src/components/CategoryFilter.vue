@@ -1,3 +1,5 @@
+<!-- Компонент с филтром по категориям -->
+
 <template>
   <div class="category-filter">
     <vs-card>
@@ -28,7 +30,7 @@ import category from '../plugins/category.js'
 export default {
   name: 'CategoryFilter',
   data: () => ({
-    // Фильтр по категория
+    // Фильтр по категории
     filters: category,
 
     // Выбранная категория

@@ -21,16 +21,20 @@
         Предложения отсутствуют
       </vs-alert>
 
-      <vs-card v-else v-for="(offer, id) in offers" :key="id">
-        <vs-card-body>
-          <div>
-            <p>Автор: {{ offer.author }}</p>
-            <p>Описание: {{ offer.description }}</p>
-            <p>Дата: {{ offer.date }}</p>
-            <p>Цена: {{ offer.price }}</p>
-          </div>
-        </vs-card-body>
-      </vs-card>
+      <div v-else class="offers-wrapper">
+        <h2>Отклики мастеров</h2>
+
+        <vs-card v-for="(offer, id) in offers" :key="id" class="offer">
+          <vs-card-body>
+            <div>
+              <p>Автор: {{ offer.author }}</p>
+              <p>Описание: {{ offer.description }}</p>
+              <p>Дата: {{ offer.date }}</p>
+              <p>Цена: {{ offer.price }}</p>
+            </div>
+          </vs-card-body>
+        </vs-card>
+      </div>
 
       <div v-if="abilityToAddOffer && !creatingOffer">
         <vs-button
@@ -140,3 +144,10 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.offers-wrapper {
+  width: 90%;
+  margin: auto;
+}
+</style>
