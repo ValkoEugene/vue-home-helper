@@ -130,6 +130,10 @@ export default {
 </script>
 
 <style scoped>
+.homehelper-content {
+  margin-top: 50px;
+}
+
 .homehelper-topbar {
   width: 100%;
   display: flex;

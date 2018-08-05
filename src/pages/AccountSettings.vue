@@ -1,47 +1,53 @@
 <template>
   <div class="home-helper__wrapper">
     <h1>Настройка аккаунта</h1>
+
+    <vs-card>
+      <vs-card-body>
     
-    <vs-input
-      vs-label="Имя"
-      vs-type="text"
-      v-model.trim="name"
-    />
+        <vs-input
+          vs-label="Имя"
+          vs-type="text"
+          v-model.trim="name"
+        />
 
-    <label>Возраст</label>
-    <vs-input-number size="medium" min="16" max="99" v-model="age"/>
+        <label>Возраст</label>
+        <vs-input-number size="medium" min="16" max="99" v-model="age"/>
 
-    <vs-input
-      vs-label="Город"
-      vs-type="text"
-      v-model.trim="city"
-    />
+        <vs-input
+          vs-label="Город"
+          vs-type="text"
+          v-model.trim="city"
+        />
 
-    <p>О себе</p>
-    <textarea v-model.trim="description" rows="5" />
+        <p>О себе</p>
+        <textarea v-model.trim="description" rows="5" />
 
-    <template v-if="isMaster">
-      <vs-input
-        vs-label="Опыт"
-        vs-type="text"
-        v-model.trim="experience"
-      />
+        <template v-if="isMaster">
+          <vs-input
+            vs-label="Опыт"
+            vs-type="text"
+            v-model.trim="experience"
+          />
 
-      <p>Выды выполняемых работ</p>
-      <div>
-        <vs-col v-for="type in types" :key="type.id">
-          <vs-checkbox v-model="category" :vs-value="type.id" >{{ type.name }}</vs-checkbox>
-        </vs-col>
-      </div>
-    </template>
+          <p>Выды выполняемых работ</p>
+          <div>
+            <vs-col v-for="type in types" :key="type.id">
+              <vs-checkbox v-model="category" :vs-value="type.id" >{{ type.name }}</vs-checkbox>
+            </vs-col>
+          </div>
+        </template>
 
-    <vs-button
-      vs-color="primary"
-      vs-type="filled"
-      @click="updateAccountInfo"
-    >
-      Сохранить
-    </vs-button>
+        <vs-button
+          vs-color="primary"
+          vs-type="filled"
+          @click="updateAccountInfo"
+        >
+          Сохранить
+        </vs-button>
+
+      </vs-card-body>
+    </vs-card>
 
   </div>
 </template>

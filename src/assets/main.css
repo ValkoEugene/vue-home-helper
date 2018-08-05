@@ -10,6 +10,14 @@
   margin-bottom: 15px;
 }
 
+.mt-15 {
+  margin-top: 15px;
+}
+
+body {
+  background: #f1f1f1;
+}
+
 input:not([type='number']), textarea {
   margin-bottom: 15px;
 }
@@ -49,4 +57,8 @@ textarea:focus {
 
 .vs-card {
   margin-bottom: 25px!important;
+}
+
+.vs-card {
+  background: white!important;
 }

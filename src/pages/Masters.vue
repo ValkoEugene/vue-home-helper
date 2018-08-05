@@ -12,7 +12,10 @@
           </vs-alert>
 
           <vs-card v-else v-for="master in masters" :key="master.id">
-            <vs-card-header :vs-title="master.name" />
+            <vs-card-header :vs-title="master.name" :vs-fill="true">
+              <vs-avatar vs-size="large" :vs-text="master.name"/>
+            </vs-card-header>
+            
             <vs-card-body>
               <div>
                 <p>Информация: {{ master.description || '-' }}</p>
@@ -79,7 +82,6 @@ export default {
     // 
     getMatersFromQuerySnaphot(querySnaphot) {
       const masters = []
-      console.log(querySnaphot)
 
       querySnaphot.forEach(doc => {
         let master = {
@@ -92,8 +94,6 @@ export default {
           experience: doc.data().experience,
           category: doc.data().category
         }
-
-        console.log(master)
 
         masters.push(master)
       })
@@ -152,5 +152,8 @@ export default {
 
 .category-filter-wrapper {
   width: 25%;
+  position: fixed;
+  right: 15px;
+  top: 90px;
 }
 </style>

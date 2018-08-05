@@ -1,50 +1,56 @@
 <template>
   <div class="home-helper__wrapper">
     <h1>Создать заявку</h1>
+    <vs-card>
+      <vs-card-body>
+        
+        <vs-input
+          vs-label="Название заявки"
+          vs-type="text"
+          v-model.trim="name"
+        />
 
-    <vs-input
-      vs-label="Название заявки"
-      vs-type="text"
-      v-model.trim="name"
-    />
+        <vs-select
+          class="selectExample"
+          vs-label="Тип заявки"
+          v-model="type"
+        >
+          <vs-select-item
+            v-for="type in types"
+            :key="type.id"
+            :vs-value="type.id"
+            :vs-text="type.name"
+          />
+        </vs-select>
 
-    <vs-select
-      class="selectExample"
-      vs-label="Тип заявки"
-      v-model="type"
-    >
-      <vs-select-item
-        v-for="type in types"
-        :key="type.id"
-        :vs-value="type.id"
-        :vs-text="type.name"
-      />
-    </vs-select>
+        <vs-input
+          vs-label="Адрес"
+          vs-type="text"
+          v-model.trim="address"
+        />
+        
+        <div class="mb-15">
+          Дата окончания
+          <datepicker
+            v-model="selectDate"
+            :language="russianLocale"
+            input-class="datepicker-custom"
+          />
+        </div>
 
-    <vs-input
-      vs-label="Адрес"
-      vs-type="text"
-      v-model.trim="address"
-    />
-    
-    <div class="mb-15">
-      Дата окончания
-      <datepicker
-        v-model="selectDate"
-        :language="russianLocale"
-        input-class="datepicker-custom"
-      />
-    </div>
+        <textarea v-model.trim="description" rows="5" placeholder="Описание"/>
 
-    <textarea v-model.trim="description" rows="5" placeholder="Описание"/>
+        <vs-button
+          vs-color="primary"
+          vs-type="filled"
+          @click="addIssue"
+        >
+          Создать заявку
+        </vs-button>
 
-    <vs-button
-      vs-color="primary"
-      vs-type="filled"
-      @click="addIssue"
-    >
-      Создать заявку
-    </vs-button>
+      </vs-card-body>
+    </vs-card>
+
   </div>
 </template>
 

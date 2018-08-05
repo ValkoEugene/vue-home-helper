@@ -12,21 +12,39 @@
           </vs-alert>
 
           <vs-card v-else v-for="issue in issues" :key="issue.id" actionable>
-            <vs-card-header :vs-title="issue.name" />
+            <vs-card-header :vs-title="issue.name" :vs-fill="true">
+              <vs-avatar vs-size="large" :vs-text="issue.author"/>
+            </vs-card-header>
+
             <vs-card-body>
               <div>
-                <p>Автор: {{ issue.author }}</p>
-                <p>Описание: {{ issue.description }}</p>
+                <vs-chip vs-color="primary">
+                  Открыта
+                </vs-chip>
+                <vs-chip v-if="issue.date && issue.date.seconds" vs-color="primary">
+                  Дата окончания
+                  {{ formatDate(issue.date)  }}
+                </vs-chip>
+                <vs-chip vs-color="primary">
+                  {{ 0 }} откликов
+                </vs-chip>
+
+                <h4>Автор:</h4>
+                <p>{{ issue.author }}</p>
+
+                <h4 class="mt-15">Описание:</h4>
+                <p>{{ issue.description }}</p>
               </div>
-              <div>
-                <vs-button
-                  vs-color="primary"
-                  vs-type="filled"
-                  @click="goToIssue(issue.id)"
-                >
-                  Подробнее
-                </vs-button>
-              </div>
+
+              <vs-button
+                vs-color="primary"
+                vs-type="filled"
+                @click="goToIssue(issue.id)"
+                class="mt-15"
+              >
+                Подробнее
+              </vs-button>
+
             </vs-card-body>
           </vs-card>
         </template>
@@ -42,6 +60,7 @@
 
 <script>
 import db from '../plugins/firebaseInit.js'
+import dayjs from 'dayjs'
 
 export default {
   name: 'Issues',
@@ -79,6 +98,10 @@ export default {
       this.$vs.notify({ title, text, color })
     },
 
+    formatDate(date) {
+      return dayjs(date.seconds * 1000).format('DD.MM.YYYY')
+    },
+
     changeCurentFilter(id) {
       this.curentFilter = id
     },
@@ -99,6 +122,7 @@ export default {
               name: doc.data().name,
               description: doc.data().description,
               author: doc.data().author,
+              date: doc.data().date
             }
 
             this.issues.push(issue)
@@ -154,5 +178,8 @@ export default {
 
 .category-filter-wrapper {
   width: 25%;
+  position: fixed;
+  right: 15px;
+  top: 90px;
 }
 </style>
