@@ -26,7 +26,7 @@
                   {{ formatDate(issue.date)  }}
                 </vs-chip>
                 <vs-chip vs-color="primary">
-                  {{ 0 }} откликов
+                  Отклики - {{ issue.offersCount }}
                 </vs-chip>
 
                 <h4>Автор:</h4>
@@ -122,7 +122,8 @@ export default {
               name: doc.data().name,
               description: doc.data().description,
               author: doc.data().author,
-              date: doc.data().date
+              date: doc.data().date,
+              offersCount: doc.data().offers ? Object.keys(doc.data().offers).length : 0
             }
 
             this.issues.push(issue)

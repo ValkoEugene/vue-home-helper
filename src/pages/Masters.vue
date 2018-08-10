@@ -23,6 +23,15 @@
                 <p>Город: {{ master.city || '-' }}</p>
                 <p>Опыт: {{ master.experience || '-' }}</p>
               </div>
+
+              <vs-button
+                vs-color="primary"
+                vs-type="filled"
+                @click="goToMaster(master.id)"
+                class="mt-15"
+              >
+                Подробнее
+              </vs-button>
             </vs-card-body>
           </vs-card>
         </template>
@@ -73,6 +82,10 @@ export default {
   methods: {
     showNotificacion({ title, text, color = 'primary' }) {
       this.$vs.notify({ title, text, color })
+    },
+
+    goToMaster(id) {
+      this.$router.push({ name: 'master', params: { id } })
     },
 
     changeCurentFilter(id) {

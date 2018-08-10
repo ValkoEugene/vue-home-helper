@@ -32,6 +32,15 @@
               <p>Дата: {{ offer.date }}</p>
               <p>Цена: {{ offer.price }}</p>
             </div>
+ 
+            <vs-button
+              vs-color="primary"
+              vs-type="filled"
+              @click="goToMaster(offer.masterId)"
+              class="mt-15"
+            >
+              Подробнее
+            </vs-button>
           </vs-card-body>
         </vs-card>
       </div>
@@ -96,6 +105,10 @@ export default {
   methods: {
     showNotificacion({ title, text, color = 'primary' }) {
       this.$vs.notify({ title, text, color })
+    },
+
+    goToMaster(id) {
+      this.$router.push({ name: 'master', params: { id } })
     },
 
     formatDate(date) {

@@ -74,6 +74,7 @@ export default {
     // Создаем отклик
     addOffer() {
       const data = {
+        masterId: this.authorId,
         title: this.title,
         description: this.description,
         price: this.price,
