@@ -160,6 +160,7 @@ export default {
       return this.authorId === this.userId
     },
 
+    // Проверка на возможность оставить отклик
     abilityToAddOffer() {
       return this.$store.getters.isMaster &&
       (!this.offers || !this.offers[this.userId])
@@ -240,13 +241,30 @@ export default {
       this.masterId = ''
     },
 
+    // Добавить мастеру id клиента
+    // (необходимо чтобы клиенты могли оставлять отзывы масетрам которых выбрали)
+    addMasterClientId() {
+      console.log('addMasterClientId')
+      db.collection('users').doc(this.masterId).update({
+        [`clients.${this.userId}`] : true
+      })
+      .catch(error => this.showNotificacion({
+        title: 'Ошибка при добавление мастеру id клиента!',
+        text: error,
+        color: 'danger'
+      }))
+    },
+
     // Выбрать мастера
     saveMaster() {
       db.collection('issues').doc(this.issueId).update({
         status: 'close',
         masterId: this.masterId
       })
-      .then(() => this.status = 'close')
+      .then(() => {
+        this.status = 'close'
+        this.addMasterClientId()
+      })
       .catch(error => this.showNotificacion({
         title: 'Ошибка при выборе мастера!',
         text: error,
