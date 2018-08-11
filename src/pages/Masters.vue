@@ -54,13 +54,17 @@ export default {
     CategoryFilter: () => import('../components/CategoryFilter.vue')
   },
   data: () => ({
+    // Флаг загрузки
     loading: true,
 
+    // Список мастеров
     masters: [],
 
+    // Текущий фильтр
     curentFilter: ''
   }),
   computed: {
+    // Флаг наличия мастеров
     haveMasters() {
       return this.masters.length > 0
     }
@@ -70,82 +74,59 @@ export default {
       this.masters = []
 
       if (filter === 'all') {
-        this.loadMasters()
+        this.loadMasters('all')
       } else {
-        this.loadfilteredMasters()
+        this.loadMasters(filter)
       }
     }
-  },
-  mounted() {
-    // this.loadMasters()
   },
   methods: {
     showNotificacion({ title, text, color = 'primary' }) {
       this.$vs.notify({ title, text, color })
     },
 
+    // Перейти на сраницу мастера
     goToMaster(id) {
       this.$router.push({ name: 'master', params: { id } })
     },
 
+    // Поменять текущий фильтр
     changeCurentFilter(id) {
       this.curentFilter = id
     },
     
-    // 
-    getMatersFromQuerySnaphot(querySnaphot) {
-      const masters = []
-
-      querySnaphot.forEach(doc => {
-        let master = {
-          id: doc.id,
-          name: doc.data().name,
-          accountType: doc.data().accountType,
-          age: doc.data().age,
-          city: doc.data().city,
-          description: doc.data().description,
-          experience: doc.data().experience,
-          category: doc.data().category
-        }
-
-        masters.push(master)
-      })
-
-      return masters
-    },
-
-    loadMasters() {
+    // Загрузить список мастеров
+    loadMasters(filter) {
       this.loading = true
 
-      db.collection('users')
+      let mastersFromDB = db.collection('users')
         .where('accountType', '==', 'master')
-        .get()
-        .then(querySnaphot => this.getMatersFromQuerySnaphot(querySnaphot))
-        .then(mastres => {
-          this.masters = mastres
+
+      if (filter !== 'all') {
+        mastersFromDB = mastersFromDB.where(`category.${filter}`, '==', true)
+      }
+
+      mastersFromDB.get()
+        .then(querySnaphot => {
+          querySnaphot.forEach(doc => {
+            let master = {
+              id: doc.id,
+              name: doc.data().name,
+              accountType: doc.data().accountType,
+              age: doc.data().age,
+              city: doc.data().city,
+              description: doc.data().description,
+              experience: doc.data().experience,
+              category: doc.data().category
+            }
+
+            this.masters.push(master)
+          })
+
           this.loading = false
         })
         .catch(error => this.showNotificacion({
-          title: 'Ошибка при загрузке заявок!',
-          text: error,
-          color: 'danger'
-        }))
-    },
-
-    loadfilteredMasters() {
-      this.loading = true
-
-      db.collection('users')
-        .where('accountType', '==', 'master')
-        .where(`category.${this.curentFilter}`, '==', true)
-        .get()
-        .then(querySnaphot => this.getMatersFromQuerySnaphot(querySnaphot))
-        .then(mastres => {
-          this.masters = mastres
-          this.loading = false
-        })
-        .catch(error => this.showNotificacion({
-          title: 'Ошибка при загрузке заявок!',
+          title: 'Ошибка при загрузке мастеров!',
           text: error,
           color: 'danger'
         }))

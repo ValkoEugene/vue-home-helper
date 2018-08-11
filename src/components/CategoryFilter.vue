@@ -12,6 +12,7 @@
               Все
             </vs-radio>
           </li>
+
           <li v-for="filter in filters" :key="filter.id">
             <vs-radio v-model="curentFilter" :vs-value="filter.id">
               {{ filter.name }}
@@ -29,6 +30,13 @@ import category from '../plugins/category.js'
 
 export default {
   name: 'CategoryFilter',
+  props: {
+    // Кастомные значения для фильтра
+    customFilters: {
+      type: Array,
+      default: () => ([])
+    }
+  },
   data: () => ({
     // Фильтр по категории
     filters: category,
@@ -40,6 +48,9 @@ export default {
     curentFilter: 'changeCurentFilter'
   },
   mounted() {
+    // добавляем касотмные категории
+    this.filters = [...this.filters, ...this.customFilters]
+
     // Изначально активны все категории
     this.changeCurentFilter('all')
   },

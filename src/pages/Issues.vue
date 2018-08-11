@@ -26,7 +26,7 @@
                   {{ formatDate(issue.date)  }}
                 </vs-chip>
                 <vs-chip vs-color="primary">
-                  Отклики - {{ issue.offersCount }}
+                  Отклики: {{ issue.offersCount || 0 }}
                 </vs-chip>
 
                 <h4>Автор:</h4>
@@ -51,7 +51,7 @@
       </div>
 
       <div class="category-filter-wrapper">
-        <category-filter @changeCurentFilter="changeCurentFilter" />
+        <category-filter :custom-filters="customFilters" @changeCurentFilter="changeCurentFilter"/>
       </div>
 
     </div>
@@ -68,53 +68,76 @@ export default {
     CategoryFilter: () => import('../components/CategoryFilter.vue')
   },
   data: () => ({
+    // Флаг загрузки
     loading: true,
 
+    // Список заявок
     issues: [],
 
+    // Фильтр для показа собственных заявок
+    customFilters: [
+      {
+        id: 'ownIssues',
+        name: 'Ваши заявки'
+      }
+    ],
+
+    // Текущий фильтр
     curentFilter: ''
   }),
   computed: {
+    // Флаг наличия заявок
     haveIssues() {
       return this.issues.length > 0
-    }
+    },
+
+    // Id пользователя
+    authorId() {
+      return this.$store.getters.userId
+    },
   },
   watch: {
     curentFilter(filter) {
       this.issues = []
 
-      if (filter === 'all') {
-        this.loadIssues()
-      } else {
-        this.loadfilteredIssues()
-      }
+      this.loadIssues(filter)
     }
-  },
-  mounted() {
-    // this.loadIssues()
   },
   methods: {
     showNotificacion({ title, text, color = 'primary' }) {
       this.$vs.notify({ title, text, color })
     },
 
+    // Форматирование даты
     formatDate(date) {
       return dayjs(date.seconds * 1000).format('DD.MM.YYYY')
     },
 
+    // Поменять текущий фильтр
     changeCurentFilter(id) {
       this.curentFilter = id
     },
 
+    // Перейти к странице заявки
     goToIssue(id) {
       this.$router.push({ name: 'issue', params: { id } })
     },
 
-    loadIssues() {
+    // Загрузить заявки
+    loadIssues(filter) {
       this.loading = true
 
-      db.collection('issues')
-        .get()
+      let issuesFromDB = db.collection('issues')
+
+      if (filter === 'all') {
+        // для показа всех заявк не используем where
+      } else if (filter === 'ownIssues') {
+        issuesFromDB = issuesFromDB.where('authorId', '==', this.authorId)
+      } else {
+        issuesFromDB = issuesFromDB.where('type', '==', filter)
+      }
+
+      issuesFromDB.get()
         .then(querySnaphot => {
           querySnaphot.forEach(doc => {
             let issue = {
@@ -124,33 +147,6 @@ export default {
               author: doc.data().author,
               date: doc.data().date,
               offersCount: doc.data().offers ? Object.keys(doc.data().offers).length : 0
-            }
-
-            this.issues.push(issue)
-          })
-
-          this.loading = false
-        })
-        .catch(error => this.showNotificacion({
-          title: 'Ошибка при загрузке заявок!',
-          text: error,
-          color: 'danger'
-        }))
-    },
-
-    loadfilteredIssues() {
-      this.loading = true
-
-      db.collection('issues')
-        .where('type', '==', this.curentFilter)
-        .get()
-        .then(querySnaphot => {
-          querySnaphot.forEach(doc => {
-            let issue = {
-              id: doc.id,
-              name: doc.data().name,
-              description: doc.data().description,
-              author: doc.data().author,
             }
 
             this.issues.push(issue)

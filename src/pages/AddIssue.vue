@@ -57,6 +57,8 @@
 <script>
 import db from '../plugins/firebaseInit.js'
 import { ru } from 'vuejs-datepicker/dist/locale'
+// Категории работ
+import category from '../plugins/category.js'
 
 export default {
   name: 'AddIssues',
@@ -82,33 +84,15 @@ export default {
     // Тип заявки
     type: '',
 
-    types: [
-      {
-        id: 'trucking',
-        name: 'Грузоперевозки'
-      },
-      {
-        id: 'courier',
-        name: 'Курьерские услуги'
-      },
-      {
-        id: 'technique_rent',
-        name: 'Аренда техники'
-      },
-      {
-        id: 'repairs',
-        name: 'Ремонт и строительство'
-      },
-      {
-        id: 'electrics',
-        name: 'Электрика'  
-      },
-      {
-        id: 'cleaning',
-        name: 'Уборка'
-      },
-    ],
+    // Список категорий
+    types: category
   }),
+  computed: {
+    // Id пользователя
+    authorId() {
+      return this.$store.getters.userId
+    },
+  },
   methods: {
     showNotificacion({ title, text, color = 'primary' }) {
       this.$vs.notify({ title, text, color })
@@ -121,7 +105,8 @@ export default {
         address: this.address,
         date: this.selectDate,
         type: this.type,
-        author: this.$store.state.user.email
+        author: this.$store.state.user.email,
+        authorId: this.authorId
       }
 
       db.collection('issues').add(data)
