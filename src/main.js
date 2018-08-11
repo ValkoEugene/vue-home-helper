@@ -28,6 +28,7 @@ function getUserInfo(uid) {
         if (userInfo.accountType === 'master') {
           userInfo.experience = doc.data().experience
           userInfo.category = doc.data().category
+          userInfo.phone = doc.data().phone
         }
 
         store.commit('setUser', Object.assign({}, store.state.user, userInfo))

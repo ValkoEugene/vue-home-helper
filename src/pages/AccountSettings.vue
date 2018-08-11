@@ -27,6 +27,12 @@
 
         <template v-if="isMaster">
           <vs-input
+            vs-label="Телефон"
+            vs-type="text"
+            v-model.trim="phone"
+          />
+
+          <vs-input
             vs-label="Опыт"
             vs-type="text"
             v-model.trim="experience"
@@ -70,6 +76,9 @@ export default {
 
     // Город
     city: '',
+
+    // Номер телефона (для мастеров)
+    phone: '',
 
     // Информация о себе (для мастеров)
     description: '',
@@ -146,6 +155,7 @@ export default {
 
       this.experience = user.experience || ''
       this.category = user.category ? this.convertObjectToArray(user.category) : []
+      this.phone = user.phone || ''
     },
 
     // Обновление инофрмации о аккаунте
@@ -160,6 +170,7 @@ export default {
       }
 
       if (this.isMaster) {
+        data.phone = this.phone
         data.experience = this.experience
         data.category = this.category.length ? this.convertArrayToObject(this.category) : null 
       }

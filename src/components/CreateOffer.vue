@@ -65,6 +65,11 @@ export default {
       return this.$store.getters.userName
     },
 
+    // Телефон атора отклика
+    authorPhone() {
+      return this.$store.getters.userPhone
+    },
+
     // Id автора отклика
     authorId() {
       return this.$store.getters.userId
@@ -75,6 +80,7 @@ export default {
     addOffer() {
       const data = {
         masterId: this.authorId,
+        phone: this.authorPhone,
         title: this.title,
         description: this.description,
         price: this.price,

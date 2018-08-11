@@ -102,6 +102,7 @@ export default {
       const data = {
         name: this.name,
         description: this.description,
+        status: 'open',
         address: this.address,
         date: this.selectDate,
         type: this.type,

@@ -19,7 +19,7 @@
             <vs-card-body>
               <div>
                 <vs-chip vs-color="primary">
-                  Открыта
+                  {{ issue.status === 'open' ? 'Открыта' : 'Закрыта' }}
                 </vs-chip>
                 <vs-chip v-if="issue.date && issue.date.seconds" vs-color="primary">
                   Дата окончания
@@ -142,6 +142,7 @@ export default {
           querySnaphot.forEach(doc => {
             let issue = {
               id: doc.id,
+              status: doc.data().status,
               name: doc.data().name,
               description: doc.data().description,
               author: doc.data().author,

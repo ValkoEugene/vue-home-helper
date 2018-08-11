@@ -18,6 +18,10 @@ const store = new Vuex.Store({
 
     userName: state => {
       return  state.user && (state.user.name || state.user.email)
+    },
+
+    userPhone: (state, getters) => {
+      return getters.isMaster && state.user.phone
     }
   },
   mutations: {
