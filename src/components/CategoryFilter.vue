@@ -8,13 +8,21 @@
         
         <ul class="leftx">
           <li>
-            <vs-radio v-model="curentFilter" vs-value="all">
+            <vs-radio
+              @click.prevent="changeCurentFilter('all')"
+              :value="curentFilter"
+              vs-value="all"
+            >
               Все
             </vs-radio>
           </li>
 
           <li v-for="filter in filters" :key="filter.id">
-            <vs-radio v-model="curentFilter" :vs-value="filter.id">
+            <vs-radio
+              @click.prevent="changeCurentFilter(filter.id)"
+              :value="curentFilter"
+              :vs-value="filter.id"
+            >
               {{ filter.name }}
             </vs-radio>
           </li>
@@ -30,19 +38,27 @@ import category from '../plugins/category.js'
 
 export default {
   name: 'CategoryFilter',
+  model: {
+    // Привязываем значение фильтра через v-model на компоненте
+    prop: 'curentFilter',
+    event: 'changeCurentFilter'
+  },
   props: {
     // Кастомные значения для фильтра
     customFilters: {
       type: Array,
       default: () => ([])
+    },
+
+    // Выбранная категория
+    curentFilter: {
+      type: String,
+      default: 'all'
     }
   },
   data: () => ({
     // Фильтр по категории
-    filters: category,
-
-    // Выбранная категория
-    curentFilter: 'all'
+    filters: category
   }),
   watch: {
     curentFilter: 'changeCurentFilter'
@@ -50,9 +66,6 @@ export default {
   mounted() {
     // добавляем касотмные категории
     this.filters = [...this.filters, ...this.customFilters]
-
-    // Изначально активны все категории
-    this.changeCurentFilter('all')
   },
   methods: {
     // Смена текущего фильтра

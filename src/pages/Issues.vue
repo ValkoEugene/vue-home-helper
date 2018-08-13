@@ -2,6 +2,21 @@
   <div class="home-helper__wrapper">
     <h1>Заявки</h1>
 
+    <div class="filter-btn primary">
+      <i class="material-icons" @click="showModalFiler">
+        filter_list
+      </i>
+    </div>
+
+    <div class="modal-filter-wrapper" v-show="showingModalFiler" @click="closeModalFilter">
+      <category-filter
+        class="modal-filter"
+        v-model="curentFilter"
+        :custom-filters="customFilters"
+        @changeCurentFilter="changeCurentFilter"
+      />
+    </div>
+
     <div class="issues__container">
       <div class="issues-items">
         <preloader v-if="loading"/>
@@ -51,7 +66,11 @@
       </div>
 
       <div class="category-filter-wrapper">
-        <category-filter :custom-filters="customFilters" @changeCurentFilter="changeCurentFilter"/>
+        <category-filter
+          v-model="curentFilter"
+          :custom-filters="customFilters"
+          @changeCurentFilter="changeCurentFilter"
+        />
       </div>
 
     </div>
@@ -71,6 +90,9 @@ export default {
     // Флаг загрузки
     loading: true,
 
+    // Флаг показа фильтра в модальном окне
+    showingModalFiler: false,
+
     // Список заявок
     issues: [],
 
@@ -83,7 +105,7 @@ export default {
     ],
 
     // Текущий фильтр
-    curentFilter: ''
+    curentFilter: 'all'
   }),
   computed: {
     // Флаг наличия заявок
@@ -103,6 +125,9 @@ export default {
       this.loadIssues(filter)
     }
   },
+  mounted() {
+    this.loadIssues(this.curentFilter)
+  },
   methods: {
     showNotificacion({ title, text, color = 'primary' }) {
       this.$vs.notify({ title, text, color })
@@ -111,6 +136,16 @@ export default {
     // Форматирование даты
     formatDate(date) {
       return dayjs(date.seconds * 1000).format('DD.MM.YYYY')
+    },
+
+    // Показать фильтр в модальном окне
+    showModalFiler() {
+      this.showingModalFiler = true
+    },
+
+    // Скрыть фильтр в модальном окне
+    closeModalFilter() {
+      this.showingModalFiler = false
     },
 
     // Поменять текущий фильтр
@@ -166,6 +201,36 @@ export default {
 </script>
 
 <style scoped>
+.modal-filter-wrapper {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 10000;
+  background: #000000d9;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-filter {
+  width: 50%;
+}
+
+.filter-btn {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  background: rgba(var(--primary),1);
+  padding: 10px;
+  border-radius: 50%;
+  color: white;
+  cursor: pointer;
+  z-index: 100000;
+  box-shadow: 0 20px 40px -8px rgba(0,0,0,.1);
+}
+
 .issues__container {
   display: flex;
 }
@@ -179,5 +244,18 @@ export default {
   position: fixed;
   right: 15px;
   top: 90px;
+}
+
+@media only screen and (max-width: 768px){ 
+  .modal-filter {
+    width: 90%;
+  }
+
+  .issues-items {
+    width: 100%;
+  }
+  .category-filter-wrapper {
+    display: none;
+  }
 }
 </style>
