@@ -67,6 +67,11 @@ textarea:focus {
   z-index: 100000!important;
 }
 
+.card-titles {
+  margin-right: 10px;
+  white-space: pre-line;
+}
+
 @media only screen and (max-width: 768px){
   .home-helper__wrapper {
     width: 95%;

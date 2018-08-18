@@ -27,25 +27,28 @@
           </vs-alert>
 
           <vs-card v-else v-for="issue in issues" :key="issue.id" actionable>
-            <vs-card-header :vs-title="issue.name" :vs-fill="true">
+            <vs-card-header
+              :vs-title="issue.name"
+              :vs-fill="true"
+              vs-background-color="success"
+            >
               <vs-avatar vs-size="large" :vs-text="issue.author"/>
             </vs-card-header>
 
             <vs-card-body>
               <div>
-                <vs-chip vs-color="primary">
+                <vs-chip vs-color="success">
                   {{ issue.status === 'open' ? 'Открыта' : 'Закрыта' }}
                 </vs-chip>
-                <vs-chip v-if="issue.date && issue.date.seconds" vs-color="primary">
-                  Дата окончания
-                  {{ formatDate(issue.date)  }}
-                </vs-chip>
-                <vs-chip vs-color="primary">
+                <vs-chip vs-color="success">
                   Отклики: {{ issue.offersCount || 0 }}
                 </vs-chip>
 
-                <h4>Автор:</h4>
+                <h4 class="mt-15">Автор:</h4>
                 <p>{{ issue.author }}</p>
+
+                <h4 class="mt-15">Дата окончания:</h4>
+                <p>{{ issue.date && issue.date.seconds ? formatDate(issue.date) : '-' }}</p>
 
                 <h4 class="mt-15">Описание:</h4>
                 <p>{{ issue.description }}</p>

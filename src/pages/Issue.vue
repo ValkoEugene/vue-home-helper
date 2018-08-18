@@ -6,13 +6,20 @@
 
     <div v-else>
       <vs-card>
-        <vs-card-header :vs-title="name" />
+        <vs-card-header :vs-title="name" vs-background-color="success"/>
         <vs-card-body>
           <div>
-            <p>Автор: {{ author }}</p>
-            <p>Описание: {{ description }}</p>
-            <p>Дата окончания: {{ formatDate(date) }}</p>
-            <p>Адрес: {{ address }}</p>
+            <h4>Автор:</h4>
+            <p>{{ author }}</p>
+
+            <h4 class="mt-15">Дата окончания:</h4>
+            <p>{{ date && date.seconds ? formatDate(date) : '-' }}</p>
+
+            <h4 class="mt-15">Описание:</h4>
+            <p>{{ description || '-' }}</p>
+
+            <h4 class="mt-15">Адрес:</h4>
+            <p>{{ address || '-' }}</p>
           </div>
         </vs-card-body>
       </vs-card>

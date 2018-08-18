@@ -23,11 +23,11 @@ import firebase from 'firebase'
 Vue.use(Vuesax, {
   theme:{
     colors:{
-      primary:'#5b3cc4',
-      success:'rgb(23, 201, 100)',
+      primary:'#1f74ff',
+      success:'#663399',
       danger:'rgb(242, 19, 93)',
       warning:'rgb(255, 130, 0)',
-      dark:'rgb(36, 33, 69)'
+      dark:'rgb(0, 66, 175)'
     }
   }
 })

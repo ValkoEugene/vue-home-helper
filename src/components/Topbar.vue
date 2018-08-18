@@ -19,6 +19,7 @@
             vs-color-text="rgb(255, 255, 255)"
             vs-color="rgba(255, 255, 255, 0.3)"
             vs-type="flat"
+            class="topbar-button"
             :vs-active="actives == 'home'"
             @click="selectMenuItem('home', '/')"
           >
@@ -29,6 +30,7 @@
             vs-color-text="rgb(255, 255, 255)"
             vs-color="rgba(255, 255, 255, 0.3)"
             vs-type="flat"
+            class="topbar-button"
             :vs-active="actives == 'issues'"
             @click="selectMenuItem('issues', '/Issues')"
           >
@@ -39,6 +41,7 @@
             vs-color-text="rgb(255, 255, 255)"
             vs-color="rgba(255, 255, 255, 0.3)"
             vs-type="flat"
+            class="topbar-button"
             :vs-active="actives == 'masters'"
             @click="selectMenuItem('masters', '/masters')"
           >
@@ -48,6 +51,7 @@
             vs-color-text="rgb(255, 255, 255)"
             vs-color="rgba(255, 255, 255, 0.3)"
             vs-type="flat"
+            class="topbar-button"
             :vs-active="actives == 'add-issue'"
             @click="selectMenuItem('add-issue', '/add-issue')"
           >
@@ -57,6 +61,7 @@
             vs-color-text="rgb(255, 255, 255)"
             vs-color="rgba(255, 255, 255, 0.3)"
             vs-type="flat"
+            class="topbar-button"
             :vs-active="actives == 'account-settings'"
             @click="selectMenuItem('account-settings', '/account-settings')"
           >
@@ -67,6 +72,7 @@
             vs-color-text="rgb(255, 255, 255)"
             vs-color="rgba(255, 255, 255, 0.3)"
             vs-type="flat"
+            class="topbar-button"
             @click="reauth"
           >
             Выйти
@@ -166,6 +172,10 @@ export default {
   display: flex;
   align-items: center;
   justify-content: flex-start;
+}
+
+.topbar-button {
+  margin: 0 10px;
 }
 
 .menu {
