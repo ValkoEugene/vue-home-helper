@@ -1,67 +1,7 @@
 <template>
   <div id="app">
 
-    <vs-topbar vs-color="primary" class="menu">
-      <div class="homehelper-topbar">
-        <h4 class="ml-15 mr-15">Home helper</h4>
-        
-        <vs-avatar vs-size="small" :vs-text="userName"/>
-
-        <vs-button
-          vs-color-text="rgb(255, 255, 255)"
-          vs-color="rgba(255, 255, 255, 0.3)"
-          vs-type="flat"
-          :vs-active="actives == 'home'"
-          @click="selectMenuItem('home', '/')"
-        >
-          Главная
-        </vs-button>
-    
-        <vs-button
-          vs-color-text="rgb(255, 255, 255)"
-          vs-color="rgba(255, 255, 255, 0.3)"
-          vs-type="flat"
-          @click="selectMenuItem('issues', '/Issues')"
-        >
-          Заявки
-        </vs-button>
-
-        <vs-button
-          vs-color-text="rgb(255, 255, 255)"
-          vs-color="rgba(255, 255, 255, 0.3)"
-          vs-type="flat"
-          @click="selectMenuItem('masters', '/masters')"
-        >
-          Мастера
-        </vs-button>
-        <vs-button
-          vs-color-text="rgb(255, 255, 255)"
-          vs-color="rgba(255, 255, 255, 0.3)"
-          vs-type="flat"
-          @click="selectMenuItem('add-issue', '/add-issue')"
-        >
-          Оставить заявку
-        </vs-button>
-        <vs-button
-          vs-color-text="rgb(255, 255, 255)"
-          vs-color="rgba(255, 255, 255, 0.3)"
-          vs-type="flat"
-          :vs-active="actives == 'account-settings'"
-          @click="selectMenuItem('account-settings', '/account-settings')"
-        >
-          Настройки аккаунта
-        </vs-button>
-
-        <vs-button
-          vs-color-text="rgb(255, 255, 255)"
-          vs-color="rgba(255, 255, 255, 0.3)"
-          vs-type="flat"
-          @click="reauth"
-        >
-          Выйти
-        </vs-button>
-      </div>
-     </vs-topbar>
+    <topbar @reauth="reauth"/>
 
     <div class="homehelper-content">
       <router-view />
@@ -97,19 +37,8 @@ Vue.component('preloader', Preloader)
 
 export default {
   name: 'app',
-  data: () => ({
-    active: false,
-
-    actives: 'home'
-  }),
-  computed: {
-    userId() {
-      return this.$store.state.user.uid
-    },
-
-    userName() {
-      return this.$store.getters.userName
-    }
+  components: {
+    Topbar: () => import('./components/Topbar.vue')
   },
   methods: {
     reauth() {
@@ -121,15 +50,6 @@ export default {
           this.$router.push('/login')
         })
         .catch(error => console.log(error))
-    },
-
-    showNotificacion({ title, text, color = 'primary' }) {
-      this.$vs.notify({ title, text, color })
-    },
-    
-    selectMenuItem(menuItem, path) {
-      this.actives = menuItem
-      this.$router.push(path)
     }
   }
 }
@@ -138,18 +58,5 @@ export default {
 <style scoped>
 .homehelper-content {
   margin-top: 50px;
-}
-
-.homehelper-topbar {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-}
-
-.menu {
-  position: fixed;
-  z-index: 10000;
-  top: 0;
 }
 </style>

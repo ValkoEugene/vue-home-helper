@@ -15,14 +15,14 @@ import Master from '../pages/Master.vue'
 Vue.use(VueRouter)
 
 const routes = [
-  { path: '/', component: Home, meta: { requiresAuth: true } },
+  { path: '/', component: Home },
   { path: '/login', component: Login },
   { path: '/signin', component: Signin },
-  { path: '/account-settings', component: AccountSettings },
-  { path: '/masters', component: Masters, meta: { requiresAuth: true } },
-  { path: '/master/:id', name: 'master', component: Master, meta: { requiresAuth: true } },
-  { path: '/issues', component: Issues, meta: { requiresAuth: true } },
-  { path: '/issue/:id', name: 'issue', component: Issue, meta: { requiresAuth: true } },
+  { path: '/account-settings', component: AccountSettings, meta: { requiresAuth: true } },
+  { path: '/masters', component: Masters },
+  { path: '/master/:id', name: 'master', component: Master },
+  { path: '/issues', component: Issues },
+  { path: '/issue/:id', name: 'issue', component: Issue },
   { path: '/add-issue', component: AddIssue, meta: { requiresAuth: true } }
 ]
 
