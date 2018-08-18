@@ -101,17 +101,7 @@ export default {
     // Id пользователя
     authorId() {
       return this.$store.getters.userId
-    },
-
-    // Выды выполняемых работ в виде объекта для fierbase
-    // (firebase плохо поддерживает работу с масивами поэтому рекомендуют конвертировать их в объекты)
-    //  https://firebase.google.com/docs/firestore/solutions/arrays?authuser=2
-    // categoryObj() {
-    //   return this.category.reduce((acc, item) => {
-    //     acc[item] = true
-    //     return acc
-    //   }, {})
-    // }
+    }
   },
   mounted() {
     this.initAccountInfoData()
@@ -179,7 +169,11 @@ export default {
         .doc(this.authorId)
         .update(data)
         .then(() => this.$store.commit('setUser', Object.assign({}, this.$store.state.user, data)))
-        .catch(error => console.log(error))
+        .catch(error => this.$vs.notify({
+          title: 'Ошибка при обновление инофрмации о аккаунте',
+          text: error.message || error,
+          color: 'danger'
+        }))
     }
   }
 }

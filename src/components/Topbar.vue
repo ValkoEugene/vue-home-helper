@@ -12,7 +12,7 @@
         
         <h4 class="ml-15 mr-15">Home helper</h4>
         
-        <vs-avatar vs-size="small" :vs-text="userName"/>
+        <vs-avatar v-if="userName" vs-size="small" :vs-text="userName"/>
 
         <div class="topbar-buttons">
           <vs-button
@@ -47,7 +47,9 @@
           >
             Мастера
           </vs-button>
+
           <vs-button
+            v-if="isAuth"
             vs-color-text="rgb(255, 255, 255)"
             vs-color="rgba(255, 255, 255, 0.3)"
             vs-type="flat"
@@ -57,7 +59,9 @@
           >
             Оставить заявку
           </vs-button>
+
           <vs-button
+            v-if="isAuth"
             vs-color-text="rgb(255, 255, 255)"
             vs-color="rgba(255, 255, 255, 0.3)"
             vs-type="flat"
@@ -69,6 +73,7 @@
           </vs-button>
 
           <vs-button
+            v-if="isAuth"
             vs-color-text="rgb(255, 255, 255)"
             vs-color="rgba(255, 255, 255, 0.3)"
             vs-type="flat"
@@ -76,6 +81,18 @@
             @click="reauth"
           >
             Выйти
+          </vs-button>
+
+          <vs-button
+            v-else
+            vs-color-text="rgb(255, 255, 255)"
+            vs-color="rgba(255, 255, 255, 0.3)"
+            vs-type="flat"
+            class="topbar-button"
+            :vs-active="actives == 'login'"
+            @click="selectMenuItem('login', '/login')"
+          >
+            Вход
           </vs-button>
         </div>
       </div>
@@ -124,10 +141,19 @@
       </vs-sidebar-item>
 
       <vs-sidebar-item
+        v-if="isAuth"
         :vs-active="actives == ''"
         @click="reauth"
       >
         Выход
+      </vs-sidebar-item>
+
+      <vs-sidebar-item
+        v-else
+        :vs-active="actives == 'login'"
+        @click="selectMenuItem('login', '/login')"
+      >
+        Вход
       </vs-sidebar-item>
 
     </vs-sidebar>
@@ -145,6 +171,11 @@ export default {
     actives: 'home'
   }),
   computed: {
+    // Флаг того что пользователь залогинен
+    isAuth() {
+      return this.$store.getters.isAuth
+    },
+
     // Имя пользователя
     userName() {
       return this.$store.getters.userName

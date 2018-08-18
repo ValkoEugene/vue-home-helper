@@ -104,10 +104,6 @@ export default {
     this.loadMasters('all')
   },
   methods: {
-    showNotificacion({ title, text, color = 'primary' }) {
-      this.$vs.notify({ title, text, color })
-    },
-
     // Перейти на сраницу мастера
     goToMaster(id) {
       this.$router.push({ name: 'master', params: { id } })
@@ -158,9 +154,9 @@ export default {
 
           this.loading = false
         })
-        .catch(error => this.showNotificacion({
+        .catch(error => this.$vs.notify({
           title: 'Ошибка при загрузке мастеров!',
-          text: error,
+          text: error.message || error,
           color: 'danger'
         }))
     }

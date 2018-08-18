@@ -19,9 +19,9 @@
             v-model.trim="email"
           />
 
-          <vs-input
-            vs-label="Пароль"
-            vs-type="password"
+          <label>Пароль</label>
+          <input
+            type="password"
             v-model.trim="password"
           />
 
@@ -102,7 +102,11 @@ export default {
           this.userId = user.user.uid
           this.userCreate = true
         })
-        .catch(error => console.error('Ooops', error))
+        .catch(error => this.$vs.notify({
+          title: 'Ошибка при регистрации!',
+          text: error.message || error,
+          color: 'danger'
+        }))
     },
 
     createUserInBd() {
@@ -120,7 +124,11 @@ export default {
           this.$store.commit('setUser', Object.assign({}, this.$store.state.user, data))
           this.$router.push('/')
         })
-        .catch(error => console.error('Ooops', error))
+        .catch(error => this.$vs.notify({
+          title: 'Ошибка при сохранение данных!',
+          text: error.message || error,
+          color: 'danger'
+        }))
     }
   }
 }

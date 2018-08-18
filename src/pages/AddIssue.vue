@@ -94,31 +94,28 @@ export default {
     },
   },
   methods: {
-    showNotificacion({ title, text, color = 'primary' }) {
-      this.$vs.notify({ title, text, color })
-    },
+    // Создать заявку
+    addIssue() {
+    const data = {
+      name: this.name,
+      description: this.description,
+      status: 'open',
+      address: this.address,
+      date: this.selectDate,
+      type: this.type,
+      author: this.$store.state.user.email,
+      authorId: this.authorId
+    }
 
-     addIssue() {
-      const data = {
-        name: this.name,
-        description: this.description,
-        status: 'open',
-        address: this.address,
-        date: this.selectDate,
-        type: this.type,
-        author: this.$store.state.user.email,
-        authorId: this.authorId
-      }
-
-      db.collection('issues').add(data)
-        .then(docRef =>{
-          this.$router.push(`/issue/${docRef.id}`)
-        })
-        .catch(error => this.showNotificacion({
-          title: 'Ошибка при создание заявки!',
-          text: error,
-          color: 'danger'
-        }))
+    db.collection('issues').add(data)
+      .then(docRef =>{
+        this.$router.push(`/issue/${docRef.id}`)
+      })
+      .catch(error => this.$vs.notify({
+        title: 'Ошибка при создание заявки!',
+        text: error.message || error,
+        color: 'danger'
+      }))
     }
   }
 }

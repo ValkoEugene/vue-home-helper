@@ -153,11 +153,6 @@ export default {
     this.loadMaster()
   },
   methods: {
-    // Показать уведомление
-    showNotificacion({ title, text, color = 'primary' }) {
-      this.$vs.notify({ title, text, color })
-    },
-
     // Отобразить компонент создания отзыва
     createReview() {
       this.creatingReview = true
@@ -191,9 +186,9 @@ export default {
 
           this.loading = false
         })
-        .catch(error => this.showNotificacion({
+        .catch(error => this.$vs.notify({
           title: 'Ошибка при загрузке информации о мастере!',
-          text: error,
+          text: error.message || error,
           color: 'danger'
         }))
     }

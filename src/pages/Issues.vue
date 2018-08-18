@@ -132,10 +132,6 @@ export default {
     this.loadIssues(this.curentFilter)
   },
   methods: {
-    showNotificacion({ title, text, color = 'primary' }) {
-      this.$vs.notify({ title, text, color })
-    },
-
     // Форматирование даты
     formatDate(date) {
       return dayjs(date.seconds * 1000).format('DD.MM.YYYY')
@@ -193,9 +189,9 @@ export default {
 
           this.loading = false
         })
-        .catch(error => this.showNotificacion({
+        .catch(error => this.$vs.notify({
           title: 'Ошибка при загрузке заявок!',
-          text: error,
+          text: error.message || error,
           color: 'danger'
         }))
     }

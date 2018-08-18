@@ -92,7 +92,11 @@ export default {
         [`offers.${this.authorId}`] : data
       })
       .then(() => this.$emit('addOffer', data))
-      .catch(error => console.log(error))
+      .catch(error => this.$vs.notify({
+        title: 'Ошибка при создании отклика',
+        text: error.message || error,
+        color: 'danger'
+      }))
     }
   }
 }

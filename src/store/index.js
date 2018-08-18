@@ -8,16 +8,20 @@ const store = new Vuex.Store({
     user: null,
   },
   getters: {
-    isMaster: state => {
-      return !!(state.user && state.user.accountType === 'master')
+    isAuth: state => {
+      return !!state.user
     },
 
-    userId: state => {
-      return state.user && state.user.uid
+    isMaster: (state, getters) => {
+      return getters.isAuth && state.user.accountType === 'master'
     },
 
-    userName: state => {
-      return  state.user && (state.user.name || state.user.email)
+    userId: (state, getters) => {
+      return getters.isAuth && state.user.uid
+    },
+
+    userName: (state, getters) => {
+      return  getters.isAuth && (state.user.name || state.user.email)
     },
 
     userPhone: (state, getters) => {

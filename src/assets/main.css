@@ -18,11 +18,17 @@ body {
   background: #f1f1f1;
 }
 
+label {
+  padding-left: 5px;
+  font-size: .85rem;
+  color: rgba(0,0,0,.7);
+}
+
 input:not([type='number']), textarea {
   margin-bottom: 15px;
 }
 
-textarea {
+textarea, input {
   color: inherit;
   position: relative;
   padding: .4rem;
@@ -36,7 +42,7 @@ textarea {
   transition: all .3s ease;
   width: 100%;
 }
-textarea:focus {
+textarea:focus, input:focus {
   box-shadow: 0 3px 10px 0 rgba(0,0,0,.15);
   border: 1px solid #1f74ff!important;
 }

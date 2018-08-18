@@ -13,9 +13,11 @@
         </ul>
 
         <vs-button
+          v-if="!isAuth"
           vs-color="primary"
           vs-type="relief"
           class="login-button"
+          @click="goToLogin"
         >
           Вход
         </vs-button>
@@ -107,9 +109,11 @@
       <p>Регистрируйтесь и получите результат в тот же день</p>
 
       <vs-button
+        v-if="!isAuth"
         vs-color="primary"
         vs-type="relief"
         class="login-button"
+        @click="goToLogin"
       >
         Вход
       </vs-button>
@@ -121,6 +125,18 @@
 <script>
 export default {
   name: 'Home',
+  computed: {
+    // Флаг того что пользователь залогинен
+    isAuth() {
+      return this.$store.getters.isAuth
+    }
+  },
+  methods: {
+    // Перейти на страницу с login
+    goToLogin() {
+      this.$router.push('/login')
+    }
+  }
 }
 </script>
 

@@ -68,11 +68,6 @@ export default {
     }
   },
   methods: {
-    // Показать уведомление
-    showNotificacion({ title, text, color = 'primary' }) {
-      this.$vs.notify({ title, text, color })
-    },
-
     // Создаем отзыв
     addReview() {
       const data = {
@@ -88,9 +83,9 @@ export default {
         [`reviews.${this.authorId}`] : data
       })
       .then(() => this.$emit('addReview', data))
-      .catch(error => this.showNotificacion({
+      .catch(error => this.$vs.notify({
         title: 'Ошибка при добавлении отзыва!',
-        text: error,
+        text: error.message || error,
         color: 'danger'
       }))
     }

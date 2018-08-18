@@ -16,9 +16,9 @@
           v-model.trim="email"
         />
 
-        <vs-input
-          vs-label="Пароль"
-          vs-type="password"
+        <label>Пароль</label>
+        <input
+          type="password"
           v-model.trim="password"
         />
 
@@ -50,13 +50,15 @@ export default {
       firebase
         .auth()
         .signInWithEmailAndPassword(this.email, this.password)
-        .then(
-          user => {
-            console.log('user login', user)
-            this.$router.replace('/')
-          },
-          error => console.error('Ooops', error)
-        )
+        .then(user => {
+          console.log('user login', user)
+          this.$router.replace('/')
+        })
+        .catch(error => this.$vs.notify({
+          title: 'Ошибка при входе',
+          text: error.message || error,
+          color: 'danger'
+        }))
     }
   }
 }

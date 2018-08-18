@@ -177,10 +177,6 @@ export default {
     this.loadIssue()
   },
   methods: {
-    showNotificacion({ title, text, color = 'primary' }) {
-      this.$vs.notify({ title, text, color })
-    },
-
     // Перейти на страницу мастера
     goToMaster(id) {
       this.$router.push({ name: 'master', params: { id } })
@@ -230,9 +226,9 @@ export default {
 
           this.loading = false
         })
-        .catch(error => this.showNotificacion({
+        .catch(error => this.$vs.notify({
           title: 'Ошибка при загрузке заявки!',
-          text: error,
+          text: error.message || error,
           color: 'danger'
         }))
     },
@@ -255,9 +251,9 @@ export default {
       db.collection('users').doc(this.masterId).update({
         [`clients.${this.userId}`] : true
       })
-      .catch(error => this.showNotificacion({
+      .catch(error => this.$vs.notify({
         title: 'Ошибка при добавление мастеру id клиента!',
-        text: error,
+        text: error.message || error,
         color: 'danger'
       }))
     },
@@ -272,9 +268,9 @@ export default {
         this.status = 'close'
         this.addMasterClientId()
       })
-      .catch(error => this.showNotificacion({
+      .catch(error => this.$vs.notify({
         title: 'Ошибка при выборе мастера!',
-        text: error,
+        text: error.message || error,
         color: 'danger'
       }))
     }
