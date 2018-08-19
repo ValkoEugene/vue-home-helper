@@ -50,10 +50,7 @@ export default {
       firebase
         .auth()
         .signInWithEmailAndPassword(this.email, this.password)
-        .then(user => {
-          console.log('user login', user)
-          this.$router.replace('/')
-        })
+        .then(user => this.$router.replace('/'))
         .catch(error => this.$vs.notify({
           title: 'Ошибка при входе',
           text: error.message || error,

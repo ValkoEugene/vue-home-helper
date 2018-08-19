@@ -125,6 +125,7 @@
       </vs-sidebar-item>
 
       <vs-sidebar-item
+        v-if="isAuth"
         vs-icon="add_to_photos"
         :vs-active="actives == 'add-issue'"
         @click="selectMenuItem('add-issue', '/add-issue')"
@@ -133,6 +134,7 @@
       </vs-sidebar-item>
 
       <vs-sidebar-item
+        v-if="isAuth"
         vs-icon="card_giftcard"
         :vs-active="actives == 'account-settings'"
         @click="selectMenuItem('account-settings', '/account-settings')"

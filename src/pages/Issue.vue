@@ -247,7 +247,6 @@ export default {
     // Добавить мастеру id клиента
     // (необходимо чтобы клиенты могли оставлять отзывы масетрам которых выбрали)
     addMasterClientId() {
-      console.log('addMasterClientId')
       db.collection('users').doc(this.masterId).update({
         [`clients.${this.userId}`] : true
       })

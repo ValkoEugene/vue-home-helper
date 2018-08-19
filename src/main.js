@@ -14,6 +14,10 @@ function getUserInfo(uid) {
     .doc(uid)
     .get()
     .then(doc => {
+      if (!doc.exists) {
+        return
+      }
+
       const userInfo = {
         name: doc.data().name,
         accountType: doc.data().accountType,

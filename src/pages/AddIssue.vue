@@ -10,9 +10,9 @@
           v-model.trim="name"
         />
 
+        <label>Тип заявки</label>
         <vs-select
           class="selectExample"
-          vs-label="Тип заявки"
           v-model="type"
         >
           <vs-select-item

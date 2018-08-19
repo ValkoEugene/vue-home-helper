@@ -45,9 +45,9 @@
             v-model.trim="name"
           />
 
+          <label>Тип аккаунта</label>
           <vs-select
             class="selectExample"
-            vs-label="Тип аккаунта"
             v-model="accountType"
           >
             <vs-select-item
