@@ -23,7 +23,7 @@
         </vs-button>
       </div>
 
-      <div class="phone" />
+      <phone />
     </div>
 
     <div class="issues">
@@ -125,6 +125,9 @@
 <script>
 export default {
   name: 'Home',
+  components: {
+    Phone: () => import('../components/Phone.vue')
+  },
   computed: {
     // Флаг того что пользователь залогинен
     isAuth() {
@@ -142,6 +145,9 @@ export default {
 
 <style scoped>
 .about-wrapper {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
   margin-top: -20px;
   background: #ffde5f;
   padding: 50px;
@@ -150,7 +156,7 @@ export default {
 }
 
 .about {
-  width: 50%;
+  width: calc(100vw - 400px);
   background: #663399;
   color: white;
   padding: 52px;
@@ -236,11 +242,15 @@ export default {
     padding: 10px;
     width: 100%;
     display: flex;
+    flex-direction: column;
+    height: auto;
+    margin-bottom: 100px;
+    padding-top: 50px;
   }
 
   .about {
     width: 90%;
-    margin: auto;
+    margin: 50px;
     padding: 20px;
   }
 

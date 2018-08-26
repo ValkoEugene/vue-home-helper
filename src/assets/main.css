@@ -87,4 +87,10 @@ textarea:focus, input:focus {
   .home-helper__wrapper {
     width: 95%;
   }
+
+  /* Фикс табов для смартфонов */
+  .ul-tabs.ul-tabs-left {
+    display: flex;
+    flex-direction: column;
+  }
 }
