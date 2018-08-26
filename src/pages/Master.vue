@@ -8,15 +8,31 @@
       <vs-card>
         <vs-card-header :vs-title="name" />
         <vs-card-body>
-          <div>
-            <p>Возраст: {{ age }}</p>
-            <p>Описание: {{ description }}</p>
-            <p>Город: {{ city }}</p>
-            <p>Опыт: {{ experience }}</p>
-            <p>
-              Категории: {{ categoriesValue }}
-            </p>
+          <div class="master-body-wrapper">
+            <div class="master-body-content">
+              <h4>Информация:</h4>
+              <p>{{ description || '-' }}</p>
+
+              <h4 class="mt-15">Возраст:</h4>
+              <p>{{ age || '-' }}</p>
+
+              <h4 class="mt-15">Город:</h4>
+              <p>{{ city || '-' }}</p>
+
+              <h4 class="mt-15">Опыт:</h4>
+              <p>{{ experience || '-' }}</p>
+
+              <h4 class="mt-15">Категории:</h4>
+              <p>{{ categoriesValue || '-' }}</p>
+            </div>
+
+            <div class="master-body-rating">
+              <h4>Общий рейтинг</h4>
+              <p>{{ `${rating}/100` }}</p>
+              <h4>Количство отзывов: {{ reviewsCount }}</h4>
+            </div>
           </div>
+              
         </vs-card-body>
       </vs-card>
 
@@ -29,17 +45,29 @@
 
         <vs-card v-for="review in reviews" :key="review.clientId">
           <vs-card-body>
-            <div>
-              <p>Автор: {{ review.author }}</p>
-              <p>Описание: {{ review.description }}</p>
-              <p>Дата: {{ review.date }}</p>
-              <p>Оценка мастера: {{ review.rating }}%</p>
+            <div class="review-content">
+              <p>
+                <span>Автор:</span>
+                {{ review.author }}
+                </p>
+              <p>
+                <span>Описание:</span>
+                {{ review.description }}
+              </p>
+              <p>
+                <span>Дата:</span>
+                {{ review.date }}
+              </p>
+              <p>
+                <span>Оценка мастера:</span>
+                {{ review.rating }}%
+              </p>
             </div>
           </vs-card-body>
         </vs-card>
       </div>
 
-      <div v-if="abilityToAddReview && !creatingReview">
+      <div v-if="abilityToAddReview && !creatingReview" class="create-review">
         <vs-button
           vs-color="primary"
           vs-type="filled"
@@ -50,7 +78,13 @@
       </div>
 
       <div v-if="creatingReview">
-        <create-review :master-id="masterId" @addReview="addReview"/>
+        <create-review
+          :master-id="masterId"
+          :reviews-count="reviewsCount"
+          :total-rating-sum="totalRatingSum"
+          @addReview="addReview"
+          @updateRating="updateRating"
+        />
       </div>
 
     </div>
@@ -99,7 +133,13 @@ export default {
     clients: null,
 
     // Отзывы
-    reviews: {}
+    reviews: {},
+
+    // Количество оставленных отзывов
+    reviewsCount: 0,
+
+    // Общая сумма баллов рейтинга
+    totalRatingSum: 0
   }),
   computed: {
     // Id пользователя
@@ -112,9 +152,9 @@ export default {
       return this.$route.params.id
     },
 
-    // Количество оставленных отзывов
-    reviewsCount() {
-      return Object.keys(this.reviews).length
+    // Рейтинг мастера
+    rating() {
+      return !this.reviewsCount ? 0 : this.totalRatingSum / this.reviewsCount
     },
 
     // Проверка на возможность оставить отзыв
@@ -168,6 +208,13 @@ export default {
       this.creatingReview = false
     },
 
+    // Обновить рейтинг
+    updateRating({ reviewsCount, totalRatingSum }) {
+      this.reviewsCount = reviewsCount
+      this.totalRatingSum = totalRatingSum
+    },
+
+    // Загрузить информацию о мастере
     loadMaster() {
       this.loading = true
 
@@ -175,14 +222,16 @@ export default {
         .doc(this.masterId)
         .get()
         .then(doc => {
-          this.name = doc.data().name,
-          this.age = doc.data().age,
-          this.city = doc.data().city,
-          this.description = doc.data().description,
-          this.experience = doc.data().experience,
+          this.name = doc.data().name
+          this.age = doc.data().age
+          this.city = doc.data().city
+          this.description = doc.data().description
+          this.experience = doc.data().experience
           this.categories = doc.data().category
           this.clients = doc.data().clients
           this.reviews = doc.data().reviews || {}
+          this.reviewsCount = doc.data().reviewsCount || 0
+          this.totalRatingSum = doc.data().totalRatingSum || 0
 
           this.loading = false
         })
@@ -200,5 +249,53 @@ export default {
 .reviews-wrapper {
   width: 90%;
   margin: auto;
+}
+.review-content p span{
+  color: rgba(var(--primary),1);
+  font-weight: bold;
+}
+
+.create-review {
+  position: fixed;
+  bottom: 15px;
+  right: 15px;
+}
+
+.master-body-wrapper {
+  display: flex;
+}
+
+.master-body-content {
+  width: 75%;
+}
+
+.master-body-rating {
+  width: 25%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.master-body-rating p {
+  color: rgba(var(--primary),1);
+  font-size: 28px;
+  font-weight: bold;
+}
+
+@media only screen and (max-width: 768px){
+  .master-body-wrapper {
+    flex-direction: column-reverse;
+  }
+
+  .master-body-content {
+    width: 100%;
+  }
+
+  .master-body-rating {
+    margin-bottom: 15px;
+    width: 100%;
+  }
 }
 </style>

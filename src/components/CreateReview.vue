@@ -44,6 +44,18 @@ export default {
     masterId: {
       type: String,
       required: true
+    },
+
+    // Количество оставленных отзывов
+    reviewsCount: {
+      type: Number,
+      required: true
+    },
+
+    // Общая сумма баллов рейтинга
+    totalRatingSum: {
+      type: Number,
+      required: true
     }
   },
   data: () => ({
@@ -79,10 +91,20 @@ export default {
         author: this.author
       }
 
+      const newRating = {
+        reviewsCount: this.reviewsCount + 1,
+        totalRatingSum: this.totalRatingSum + this.rating
+      }
+
       db.collection('users').doc(this.masterId).update({
-        [`reviews.${this.authorId}`] : data
+        [`reviews.${this.authorId}`] : data,
+        reviewsCount: newRating.reviewsCount,
+        totalRatingSum: newRating.totalRatingSum
       })
-      .then(() => this.$emit('addReview', data))
+      .then(() => {
+        this.$emit('addReview', data)
+        this.$emit('updateRating', newRating)
+      })
       .catch(error => this.$vs.notify({
         title: 'Ошибка при добавлении отзыва!',
         text: error.message || error,
