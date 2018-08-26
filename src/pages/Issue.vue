@@ -6,9 +6,13 @@
 
     <div v-else>
       <vs-card>
-        <vs-card-header :vs-title="name" vs-background-color="success"/>
+        <vs-card-header :vs-title="name" vs-background-color="primary"/>
         <vs-card-body>
           <div>
+            <vs-chip v-if="isIssueOverdue" vs-color="warning">
+              Просрочена
+            </vs-chip>
+
             <h4>Автор:</h4>
             <p>{{ author }}</p>
 
@@ -37,10 +41,19 @@
               <vs-chip vs-color="primary" v-if="closedIssue && offer.masterId === masterId">
                 Выбран как исполнитель
               </vs-chip>
-              <p>Автор: {{ offer.author }}</p>
-              <p>Описание: {{ offer.description }}</p>
-              <p>Дата: {{ offer.date }}</p>
-              <p>Цена: {{ offer.price }}</p>
+
+              <vs-chip vs-color="success">
+                {{ offer.date || '-' }}
+              </vs-chip>
+
+              <h4>Автор:</h4>
+              <p>{{ offer.author || '-' }}</p>
+
+              <h4 class="mt-15">Описание:</h4>
+              <p>{{ offer.description || '-' }}</p>
+
+              <h4 class="mt-15">Цена:</h4>
+              <p>{{ `${offer.price} Руб.` || '-' }}</p>
 
               <h3 v-if="closedIssue && isOwnIssue && offer.masterId === masterId">
                 Телефон: {{ offer.phone }}
@@ -57,7 +70,7 @@
             </vs-button>
 
             <vs-button
-              v-if="isOwnIssue && !closedIssue"
+              v-if="isOwnIssue && !closedIssue && !isIssueOverdue"
               vs-color="success"
               vs-type="filled"
               @click="confirmCheckMaster(offer.masterId, offer.author)"
@@ -69,7 +82,10 @@
         </vs-card>
       </div>
 
-      <div v-if="!closedIssue && abilityToAddOffer && !creatingOffer && !isOwnIssue">
+      <div
+        v-if="!closedIssue && !isIssueOverdue && abilityToAddOffer && !creatingOffer && !isOwnIssue"
+        class="add-offer"
+      >
         <vs-button
           vs-color="primary"
           vs-type="filled"
@@ -171,6 +187,11 @@ export default {
     abilityToAddOffer() {
       return this.$store.getters.isMaster &&
       (!this.offers || !this.offers[this.userId])
+    },
+
+    // Флаг что заявка просрочена
+    isIssueOverdue () {
+       return dayjs(this.date.seconds * 1000).isBefore(dayjs())
     }
   },
   mounted() {
@@ -281,5 +302,11 @@ export default {
 .offers-wrapper {
   width: 90%;
   margin: auto;
+}
+
+.add-offer {
+  position: fixed;
+  bottom: 15px;
+  right: 15px;
 }
 </style>

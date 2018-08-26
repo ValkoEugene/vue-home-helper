@@ -47,12 +47,17 @@ textarea:focus, input:focus {
   border: 1px solid #1f74ff!important;
 }
 
+/* Полоса для выбранного таба */
+.con-vs-tabs .con-ul-tabs .line-vs-tabs {
+  display: none;
+}
+
 .vs-con-input-label, .input-select {
   width: 100%;
 }
 
 .home-helper__wrapper {
-  width: 80%;
+  width: 90%;
   margin: auto;
   margin-top: 25px;
 }

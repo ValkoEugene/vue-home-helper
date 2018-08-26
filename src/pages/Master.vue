@@ -181,7 +181,7 @@ export default {
     // Значения категорий
     categoriesValue() {
       if (!this.categoriesArr.length) {
-        return []
+        return ''
       }
 
       return this.categoriesArr.map(item => {

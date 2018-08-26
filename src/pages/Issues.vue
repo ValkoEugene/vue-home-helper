@@ -2,10 +2,11 @@
   <div class="home-helper__wrapper">
     <h1>Заявки</h1>
 
-    <div class="filter-btn primary">
-      <i class="material-icons" @click="showModalFiler">
-        filter_list
-      </i>
+    <div class="filter-btn primary" @click="showModalFiler">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+        <path d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"/>
+        <path d="M0 0h24v24H0z" fill="none"/>
+      </svg>
     </div>
 
     <div class="modal-filter-wrapper" v-show="showingModalFiler" @click="closeModalFilter">
@@ -26,11 +27,17 @@
             Заявки отсутствуют
           </vs-alert>
 
-          <vs-card v-else v-for="issue in issues" :key="issue.id" actionable>
+          <vs-card
+            v-else
+            v-for="issue in issues"
+            :key="issue.id"
+            actionable
+          >
             <vs-card-header
               :vs-title="issue.name"
               :vs-fill="true"
-              vs-background-color="success"
+              vs-background-color="white"
+              class="card-header-fix"
             >
               <vs-avatar vs-size="large" :vs-text="issue.author"/>
             </vs-card-header>
@@ -42,6 +49,9 @@
                 </vs-chip>
                 <vs-chip vs-color="success">
                   Отклики: {{ issue.offersCount || 0 }}
+                </vs-chip>
+                <vs-chip v-if="checkIssueRelevance(issue.date)" vs-color="warning">
+                  Просрочена
                 </vs-chip>
 
                 <h4 class="mt-15">Автор:</h4>
@@ -68,12 +78,14 @@
         </template>
       </div>
 
-      <div class="category-filter-wrapper">
+      <div class="sidebar-wrapper">
         <category-filter
           v-model="curentFilter"
           :custom-filters="customFilters"
           @changeCurentFilter="changeCurentFilter"
         />
+
+        <faq-links />
       </div>
 
     </div>
@@ -87,7 +99,8 @@ import dayjs from 'dayjs'
 export default {
   name: 'Issues',
   components: {
-    CategoryFilter: () => import('../components/CategoryFilter.vue')
+    CategoryFilter: () => import('../components/CategoryFilter.vue'),
+    FaqLinks: () => import('../components/FaqLinks.vue')
   },
   data: () => ({
     // Флаг загрузки
@@ -135,6 +148,11 @@ export default {
     // Форматирование даты
     formatDate(date) {
       return dayjs(date.seconds * 1000).format('DD.MM.YYYY')
+    },
+
+    // Проверить актуальность заявки
+    checkIssueRelevance(date) {
+      return dayjs(date.seconds * 1000).isBefore(dayjs())
     },
 
     // Показать фильтр в модальном окне
@@ -218,13 +236,12 @@ export default {
 }
 
 .filter-btn {
+  background: white;
   position: fixed;
   bottom: 25px;
   right: 25px;
-  background: rgba(var(--primary),1);
   padding: 10px;
   border-radius: 50%;
-  color: white;
   cursor: pointer;
   z-index: 100000;
   box-shadow: 0 20px 40px -8px rgba(0,0,0,.1);
@@ -238,11 +255,13 @@ export default {
   width: 75%;
 }
 
-.category-filter-wrapper {
+.sidebar-wrapper {
   width: 25%;
-  position: fixed;
-  right: 15px;
-  top: 90px;
+  margin-left: 25px;
+}
+
+.card-header-fix {
+  color: rgba(var(--primary),1)!important
 }
 
 @media only screen and (max-width: 768px){ 
@@ -253,7 +272,7 @@ export default {
   .issues-items {
     width: 100%;
   }
-  .category-filter-wrapper {
+  .sidebar-wrapper {
     display: none;
   }
 }

@@ -20,7 +20,7 @@
             vs-color="rgba(255, 255, 255, 0.3)"
             vs-type="flat"
             class="topbar-button"
-            :vs-active="actives == 'home'"
+            :vs-active="actives === 'home'"
             @click="selectMenuItem('home', '/')"
           >
             Главная
@@ -31,7 +31,7 @@
             vs-color="rgba(255, 255, 255, 0.3)"
             vs-type="flat"
             class="topbar-button"
-            :vs-active="actives == 'issues'"
+            :vs-active="actives === 'issues'"
             @click="selectMenuItem('issues', '/Issues')"
           >
             Заявки
@@ -42,7 +42,7 @@
             vs-color="rgba(255, 255, 255, 0.3)"
             vs-type="flat"
             class="topbar-button"
-            :vs-active="actives == 'masters'"
+            :vs-active="actives === 'masters'"
             @click="selectMenuItem('masters', '/masters')"
           >
             Мастера
@@ -54,7 +54,7 @@
             vs-color="rgba(255, 255, 255, 0.3)"
             vs-type="flat"
             class="topbar-button"
-            :vs-active="actives == 'add-issue'"
+            :vs-active="actives === 'add-issue'"
             @click="selectMenuItem('add-issue', '/add-issue')"
           >
             Оставить заявку
@@ -66,11 +66,23 @@
             vs-color="rgba(255, 255, 255, 0.3)"
             vs-type="flat"
             class="topbar-button"
-            :vs-active="actives == 'account-settings'"
+            :vs-active="actives === 'account-settings'"
             @click="selectMenuItem('account-settings', '/account-settings')"
           >
             Настройки аккаунта
           </vs-button>
+
+          <vs-button
+            vs-color-text="rgb(255, 255, 255)"
+            vs-color="rgba(255, 255, 255, 0.3)"
+            vs-type="flat"
+            class="topbar-button"
+            :vs-active="actives === 'faq'"
+            @click="selectMenuItem('faq', '/faq')"
+          >
+            FAQ
+          </vs-button>
+
 
           <vs-button
             v-if="isAuth"
@@ -89,7 +101,7 @@
             vs-color="rgba(255, 255, 255, 0.3)"
             vs-type="flat"
             class="topbar-button"
-            :vs-active="actives == 'login'"
+            :vs-active="actives === 'login'"
             @click="selectMenuItem('login', '/login')"
           >
             Вход
@@ -102,7 +114,7 @@
 
       <vs-sidebar-item
         vs-icon="home"
-        :vs-active="actives == 'home'"
+        :vs-active="actives === 'home'"
         @click="selectMenuItem('home', '/')"
       >
         Главная
@@ -110,7 +122,7 @@
 
       <vs-sidebar-item
         vs-icon="library_books"
-        :vs-active="actives == 'issues'"
+        :vs-active="actives === 'issues'"
         @click="selectMenuItem('issues', '/Issues')"
       >
         Заявки
@@ -118,7 +130,7 @@
 
       <vs-sidebar-item
         vs-icon="business_center"
-        :vs-active="actives == 'masters'"
+        :vs-active="actives === 'masters'"
         @click="selectMenuItem('masters', '/masters')"
       >
         Мастера
@@ -127,7 +139,7 @@
       <vs-sidebar-item
         v-if="isAuth"
         vs-icon="add_to_photos"
-        :vs-active="actives == 'add-issue'"
+        :vs-active="actives === 'add-issue'"
         @click="selectMenuItem('add-issue', '/add-issue')"
       >
         Оставить заявку
@@ -136,15 +148,23 @@
       <vs-sidebar-item
         v-if="isAuth"
         vs-icon="card_giftcard"
-        :vs-active="actives == 'account-settings'"
+        :vs-active="actives === 'account-settings'"
         @click="selectMenuItem('account-settings', '/account-settings')"
       >
         Настройки аккаунта
       </vs-sidebar-item>
 
       <vs-sidebar-item
+        vs-icon="help"
+        :vs-active="actives === 'faq'"
+        @click="selectMenuItem('faq', '/faq')"
+      >
+        FAQ
+      </vs-sidebar-item>
+
+      <vs-sidebar-item
         v-if="isAuth"
-        :vs-active="actives == ''"
+        :vs-active="actives === ''"
         @click="reauth"
       >
         Выход
@@ -152,7 +172,7 @@
 
       <vs-sidebar-item
         v-else
-        :vs-active="actives == 'login'"
+        :vs-active="actives === 'login'"
         @click="selectMenuItem('login', '/login')"
       >
         Вход

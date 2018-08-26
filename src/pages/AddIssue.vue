@@ -34,6 +34,7 @@
           <datepicker
             v-model="selectDate"
             :language="russianLocale"
+            :disabledDates="disabledDates"
             input-class="datepicker-custom"
           />
         </div>
@@ -86,7 +87,12 @@ export default {
     type: '',
 
     // Список категорий
-    types: category
+    types: category,
+
+    // Ограничения минимальной даты  
+    disabledDates: {
+      to: new Date()
+    }
   }),
   computed: {
     // Id пользователя

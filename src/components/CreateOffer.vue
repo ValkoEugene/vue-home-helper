@@ -111,6 +111,15 @@ export default {
         return
       }
 
+      if (!this.authorPhone) {
+        this.$vs.notify({
+          title: 'Ошибка при добавлении отклика!',
+          text: 'Укажите телефон в настройках аккаунта',
+          color: 'danger'
+        })
+        return
+      }
+
       if (!this.validateForm()) {
         return
       }

@@ -11,6 +11,7 @@ import Issue from '../pages/Issue.vue'
 import AddIssue from '../pages/AddIssue.vue'
 import Masters from '../pages/Masters.vue'
 import Master from '../pages/Master.vue'
+import Faq from '../pages/Faq.vue'
 
 Vue.use(VueRouter)
 
@@ -18,6 +19,7 @@ const routes = [
   { path: '/', component: Home },
   { path: '/login', component: Login },
   { path: '/signin', component: Signin },
+  { path: '/faq', component: Faq },
   { path: '/account-settings', component: AccountSettings, meta: { requiresAuth: true } },
   { path: '/masters', component: Masters },
   { path: '/master/:id', name: 'master', component: Master },
