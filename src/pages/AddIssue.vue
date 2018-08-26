@@ -30,7 +30,7 @@
         />
         
         <div class="mb-15">
-          Дата окончания
+          <label>Дата окончания</label>
           <datepicker
             v-model="selectDate"
             :language="russianLocale"
@@ -38,7 +38,8 @@
           />
         </div>
 
-        <textarea v-model.trim="description" rows="5" placeholder="Описание"/>
+        <label>Описание</label>
+        <textarea v-model.trim="description" rows="5" placeholder="..."/>
 
         <vs-button
           vs-color="primary"
@@ -94,20 +95,58 @@ export default {
     },
   },
   methods: {
+    // Проверить заполненность формы
+    validateForm() {
+      if (!this.name) {
+        this.showHint('Заполните поле - Название заявки')
+        return false
+      }
+
+      if (!this.address) {
+        this.showHint('Заполните поле - Адрес')
+        return false
+      }
+
+      if (!this.selectDate) {
+        this.showHint('Заполните поле - Дата')
+        return false
+      }
+
+      if (!this.description) {
+        this.showHint('Заполните поле - Описание')
+        return false
+      }
+
+      return true
+    },
+
+    // Показать подсказку
+    showHint(text) {
+      this.$vs.notify({
+        title: 'Корректно заполните форму!',
+        color: 'danger',
+        text
+      })
+    },
+
     // Создать заявку
     addIssue() {
-    const data = {
-      name: this.name,
-      description: this.description,
-      status: 'open',
-      address: this.address,
-      date: this.selectDate,
-      type: this.type,
-      author: this.$store.state.user.email,
-      authorId: this.authorId
-    }
+      if (!this.validateForm()) {
+        return
+      }
 
-    db.collection('issues').add(data)
+      const data = {
+        name: this.name,
+        description: this.description,
+        status: 'open',
+        address: this.address,
+        date: this.selectDate,
+        type: this.type,
+        author: this.$store.state.user.email,
+        authorId: this.authorId
+      }
+
+      db.collection('issues').add(data)
       .then(docRef =>{
         this.$router.push(`/issue/${docRef.id}`)
       })
