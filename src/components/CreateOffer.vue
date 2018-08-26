@@ -78,6 +78,15 @@ export default {
   methods: {
     // Создаем отклик
     addOffer() {
+      if (!this.author) {
+        this.$vs.notify({
+          title: 'Ошибка при добавлении отклика!',
+          text: 'Укажите имя в настройках аккаунта',
+          color: 'danger'
+        })
+        return
+      }
+
       const data = {
         masterId: this.authorId,
         phone: this.authorPhone,

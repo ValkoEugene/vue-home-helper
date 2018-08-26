@@ -93,6 +93,11 @@ export default {
     authorId() {
       return this.$store.getters.userId
     },
+
+    // Имя автора заявки
+    author() {
+      return this.$store.getters.userName
+    },
   },
   methods: {
     // Проверить заполненность формы
@@ -131,6 +136,15 @@ export default {
 
     // Создать заявку
     addIssue() {
+      if (!this.author) {
+        this.$vs.notify({
+          title: 'Ошибка при создание заявки!',
+          text: 'Укажите имя в настройках аккаунта',
+          color: 'danger'
+        })
+        return
+      }
+
       if (!this.validateForm()) {
         return
       }
@@ -142,7 +156,7 @@ export default {
         address: this.address,
         date: this.selectDate,
         type: this.type,
-        author: this.$store.state.user.email,
+        author: this.author,
         authorId: this.authorId
       }
 

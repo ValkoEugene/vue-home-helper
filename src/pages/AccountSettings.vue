@@ -22,7 +22,7 @@
           v-model.trim="city"
         />
 
-        <p>О себе</p>
+        <label>О себе</label>
         <textarea v-model.trim="description" rows="5" />
 
         <template v-if="isMaster">
@@ -38,7 +38,7 @@
             v-model.trim="experience"
           />
 
-          <p>Выды выполняемых работ</p>
+          <label>Выды выполняемых работ</label>
           <div>
             <vs-col v-for="type in types" :key="type.id">
               <vs-checkbox v-model="category" :vs-value="type.id" >{{ type.name }}</vs-checkbox>
@@ -169,6 +169,11 @@ export default {
         .doc(this.authorId)
         .update(data)
         .then(() => this.$store.commit('setUser', Object.assign({}, this.$store.state.user, data)))
+        .then(() => this.$vs.notify({
+          title: 'Сохранено',
+          text: 'Информация об аккаунте обновлена',
+          color: 'success'
+        }))
         .catch(error => this.$vs.notify({
           title: 'Ошибка при обновление инофрмации о аккаунте',
           text: error.message || error,

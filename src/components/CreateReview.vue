@@ -11,11 +11,8 @@
           v-model.trim="title"
         />
 
-        <vs-input
-          vs-label="Описание"
-          vs-type="text"
-          v-model.trim="description"
-        />
+        <label>Описание</label>
+        <textarea v-model.trim="description" rows="5" />
 
         <label>Оценка мастеру</label>
         <vs-slider color="success" text-fixed="%" v-model="rating"/>
@@ -82,6 +79,15 @@ export default {
   methods: {
     // Создаем отзыв
     addReview() {
+      if (!this.author) {
+        this.$vs.notify({
+          title: 'Ошибка при добавлении отзыва!',
+          text: 'Укажите имя в настройках аккаунта',
+          color: 'danger'
+        })
+        return
+      }
+
       const data = {
         clientId: this.authorId,
         title: this.title,

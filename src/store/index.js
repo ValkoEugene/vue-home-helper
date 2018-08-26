@@ -21,7 +21,7 @@ const store = new Vuex.Store({
     },
 
     userName: (state, getters) => {
-      return  getters.isAuth && (state.user.name || state.user.email)
+      return  getters.isAuth && state.user.name
     },
 
     userPhone: (state, getters) => {
