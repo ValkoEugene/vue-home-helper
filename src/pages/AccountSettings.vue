@@ -14,7 +14,8 @@
         />
 
         <label>Возраст</label>
-        <vs-input-number size="medium" min="16" max="99" v-model="age"/>
+        <input type="number" class="mb-15" v-model="age">
+
 
         <vs-input
           vs-label="Город"
@@ -72,7 +73,7 @@ export default {
     name: '',
 
     // Возраст
-    age: 20,
+    age: '',
 
     // Город
     city: '',
@@ -107,7 +108,7 @@ export default {
     this.initAccountInfoData()
   },
   methods: {
-    //
+    // Конвертировать объект в массив (для совместимости с firebase)
     convertObjectToArray(obj) {
       const arr = []
 
@@ -118,7 +119,7 @@ export default {
       return arr
     },
 
-    //
+    // Конвертировать массив в объект (для совместимости с firebase)
     convertArrayToObject(arr) {
       return arr.reduce((acc, item) => {
         acc[item] = true

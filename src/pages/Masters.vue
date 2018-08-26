@@ -49,7 +49,7 @@
 
                 <div class="master-body-rating">
                   <h4>Общий рейтинг</h4>
-                  <p>{{ `${!master.reviewsCount ? 0 : master.totalRatingSum / master.reviewsCount }/100` }}</p>
+                  <p>{{ `${!master.reviewsCount ? 0 : Math.round(master.totalRatingSum / master.reviewsCount) }/100` }}</p>
                   <h4>Количство отзывов: {{ master.reviewsCount }}</h4>
                 </div>
               </div>

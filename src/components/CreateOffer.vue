@@ -11,17 +11,12 @@
           v-model.trim="title"
         />
 
-        <vs-input
-          vs-label="Описание"
-          vs-type="text"
-          v-model.trim="description"
-        />
+        <label>Описание</label>
+        <textarea v-model.trim="description" rows="4" placeholder="..."/>
 
-        <vs-input
-          vs-label="Цена"
-          vs-type="text"
-          v-model.trim="price"
-        />
+
+        <label>Цена</label>
+        <input type="number" class="mb-15" v-model="price">
 
         <vs-button
           vs-color="primary"
@@ -76,6 +71,35 @@ export default {
     }
   },
   methods: {
+    // Проверить заполненность формы
+    validateForm() {
+      if (!this.title) {
+        this.showHint('Заполните поле - Тема')
+        return false
+      }
+
+      if (!this.description) {
+        this.showHint('Заполните поле - Описание')
+        return false
+      }
+
+      if (!this.price) {
+        this.showHint('Заполните поле - Цена')
+        return false
+      }
+
+      return true
+    },
+
+    // Показать подсказку
+    showHint(text) {
+      this.$vs.notify({
+        title: 'Корректно заполните форму!',
+        color: 'danger',
+        text
+      })
+    },
+
     // Создаем отклик
     addOffer() {
       if (!this.author) {
@@ -84,6 +108,10 @@ export default {
           text: 'Укажите имя в настройках аккаунта',
           color: 'danger'
         })
+        return
+      }
+
+      if (!this.validateForm()) {
         return
       }
 

@@ -154,7 +154,7 @@ export default {
 
     // Рейтинг мастера
     rating() {
-      return !this.reviewsCount ? 0 : this.totalRatingSum / this.reviewsCount
+      return !this.reviewsCount ? 0 : Math.round(this.totalRatingSum / this.reviewsCount)
     },
 
     // Проверка на возможность оставить отзыв

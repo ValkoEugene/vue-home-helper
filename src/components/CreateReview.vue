@@ -77,6 +77,30 @@ export default {
     }
   },
   methods: {
+    // Проверить заполненность формы
+    validateForm() {
+      if (!this.title) {
+        this.showHint('Заполните поле - Тема')
+        return false
+      }
+
+      if (!this.description) {
+        this.showHint('Заполните поле - Описание')
+        return false
+      }
+
+      return true
+    },
+
+    // Показать подсказку
+    showHint(text) {
+      this.$vs.notify({
+        title: 'Корректно заполните форму!',
+        color: 'danger',
+        text
+      })
+    },
+
     // Создаем отзыв
     addReview() {
       if (!this.author) {
@@ -85,6 +109,10 @@ export default {
           text: 'Укажите имя в настройках аккаунта',
           color: 'danger'
         })
+        return
+      }
+
+      if (!this.validateForm()) {
         return
       }
 
