@@ -20,18 +20,16 @@
 
     <div class="issues__container">
       <div class="issues-items">
-        <preloader v-if="loading"/>
 
-        <template v-else>
-          <vs-alert v-if="!haveIssues" vs-color="primary" vs-active="true">
+        <template>
+          <vs-alert v-if="!haveIssues && !loading" vs-color="primary" vs-active="true">
             Заявки отсутствуют
           </vs-alert>
 
           <vs-card
-            v-else
+            v-if="haveIssues"
             v-for="issue in issues"
             :key="issue.id"
-            actionable
           >
             <vs-card-header
               :vs-title="issue.name"
@@ -76,6 +74,8 @@
             </vs-card-body>
           </vs-card>
         </template>
+
+        <preloader v-if="loading" preloader-type="block"/>
       </div>
 
       <div class="sidebar-wrapper">
@@ -106,6 +106,9 @@ export default {
     // Флаг загрузки
     loading: true,
 
+    // Процесс загрузки заявок
+    issuesAppending: true,
+
     // Флаг показа фильтра в модальном окне
     showingModalFiler: false,
 
@@ -121,7 +124,13 @@ export default {
     ],
 
     // Текущий фильтр
-    curentFilter: 'all'
+    curentFilter: 'all',
+
+    // Количество загружаемых заявок за раз
+    limit: 5,
+
+    // Последний загруженный документ (заявка) из firebase (необходимо для пагинации)
+    lastFirebaseDoc: null
   }),
   computed: {
     // Флаг наличия заявок
@@ -137,17 +146,39 @@ export default {
   watch: {
     curentFilter(filter) {
       this.issues = []
+      this.lastFirebaseDoc = null
 
       this.loadIssues(filter)
     }
   },
   mounted() {
+    document.addEventListener('scroll', this.checkScroll)
+
     this.loadIssues(this.curentFilter)
+  },
+  destroyed() {
+    document.removeEventListener('scroll', this.checkScroll)
   },
   methods: {
     // Форматирование даты
     formatDate(date) {
       return dayjs(date.seconds * 1000).format('DD.MM.YYYY')
+    },
+
+    // Подгрузка заявок при скроле
+    checkScroll() {
+      if (!this.loading || this.issuesAppending) {
+        return
+      }
+      
+      // 250px - высота прлоудера
+      if (
+          document.documentElement.scrollTop +
+          document.documentElement.clientHeight > 
+          document.documentElement.scrollHeight - 250
+        ) {
+          this.loadIssues(this.curentFilter)
+      }
     },
 
     // Проверить актуальность заявки
@@ -178,6 +209,7 @@ export default {
     // Загрузить заявки
     loadIssues(filter) {
       this.loading = true
+      this.issuesAppending = true
 
       let issuesFromDB = db.collection('issues')
 
@@ -189,8 +221,25 @@ export default {
         issuesFromDB = issuesFromDB.where('type', '==', filter)
       }
 
-      issuesFromDB.get()
+      // Если уже были загружены заявки начинаем поиск с последнего документа
+      if (this.lastFirebaseDoc) {
+        issuesFromDB = issuesFromDB.startAfter(this.lastFirebaseDoc)
+      }
+
+      // Ограничение по количеству
+      issuesFromDB = issuesFromDB.limit(this.limit)
+
+      // Загружаем с учетом всех фильтров
+      issuesFromDB
+        .get()
         .then(querySnaphot => {
+          this.lastFirebaseDoc = querySnaphot.docs[querySnaphot.docs.length - 1]
+
+          // Если заявок меньше чем значение limit значит это последняя страница
+          if (querySnaphot.docs.length < this.limit) {
+            this.lastFirebaseDoc = null
+          }
+
           querySnaphot.forEach(doc => {
             let issue = {
               id: doc.id,
@@ -205,7 +254,12 @@ export default {
             this.issues.push(issue)
           })
 
-          this.loading = false
+          // Если lastFirebaseDoc ложно - загружены все данные
+          if (!this.lastFirebaseDoc) {
+            this.loading = false
+          }
+
+          this.issuesAppending = false
         })
         .catch(error => this.$vs.notify({
           title: 'Ошибка при загрузке заявок!',

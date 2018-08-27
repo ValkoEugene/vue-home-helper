@@ -1,19 +1,40 @@
 <!-- Прелоудер -->
 
 <template>
-  <div id="preloader">
+  <div :class="preloaderType">
     <div id="loader"></div>
   </div>
 </template>
 
+<script>
+export default {
+  name: 'Preloader',
+  props: {
+    preloaderType: {
+      type: String,
+      default: 'fixed'
+    }
+  }
+}
+</script>
+
+
 <style scoped>
-#preloader {
+.fixed {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
 }
+
+.block {
+  display: block;
+  height: 250px;
+  width: 100%;
+  padding: 25px;
+}
+
 #loader {
     display: block;
     position: relative;
@@ -28,6 +49,7 @@
     -webkit-animation: spin 2s linear infinite;
     animation: spin 2s linear infinite;
 }
+
 #loader:before {
     content: "";
     position: absolute;
@@ -41,6 +63,7 @@
     -webkit-animation: spin 3s linear infinite;
     animation: spin 3s linear infinite;
 }
+
 #loader:after {
     content: "";
     position: absolute;
@@ -54,6 +77,7 @@
     -webkit-animation: spin 1.5s linear infinite;
     animation: spin 1.5s linear infinite;
 }
+
 @-webkit-keyframes spin {
     0%   {
         -webkit-transform: rotate(0deg);
@@ -66,6 +90,7 @@
         transform: rotate(360deg);
     }
 }
+
 @keyframes spin {
     0%   {
         -webkit-transform: rotate(0deg);

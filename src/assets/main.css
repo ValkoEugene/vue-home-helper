@@ -52,6 +52,10 @@ textarea:focus, input:focus {
   display: none;
 }
 
+.con-vs-alert {
+  box-shadow: 0 20px 40px -8px rgba(0,0,0,.1)!important;
+}
+
 .vs-con-input-label, .input-select {
   width: 100%;
 }

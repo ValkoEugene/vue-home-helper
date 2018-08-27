@@ -19,14 +19,17 @@
 
     <div class="masters__container">
       <div class="masters-items">
-        <preloader v-if="loading"/>
 
-        <template v-else>
-          <vs-alert v-if="!haveMasters" vs-color="primary" vs-active="true">
+        <template>
+          <vs-alert v-if="!haveMasters && !loading" vs-color="primary" vs-active="true">
             Мастера отсутствуют
           </vs-alert>
 
-          <vs-card v-else v-for="master in masters" :key="master.id">
+          <vs-card
+            v-if="haveMasters"
+            v-for="master in masters"
+            :key="master.id"
+          >
             <vs-card-header :vs-title="master.name" :vs-fill="true">
               <vs-avatar vs-size="large" :vs-text="master.name"/>
             </vs-card-header>
@@ -65,6 +68,8 @@
             </vs-card-body>
           </vs-card>
         </template>
+
+        <preloader v-if="loading" preloader-type="block"/>
       </div>
 
       <div class="sidebar-wrapper">
@@ -93,6 +98,9 @@ export default {
     // Флаг загрузки
     loading: true,
 
+    // Процесс загрузки мастеров
+    mastersAppending: true,
+
     // Флаг показа фильтра в модальном окне
     showingModalFiler: false,
 
@@ -100,7 +108,13 @@ export default {
     masters: [],
 
     // Текущий фильтр
-    curentFilter: 'all'
+    curentFilter: 'all',
+
+    // Количество загружаемых мастеров за раз
+    limit: 5,
+
+    // Последний загруженный документ (мастер) из firebase (необходимо для пагинации)
+    lastFirebaseDoc: null
   }),
   computed: {
     // Флаг наличия мастеров
@@ -111,18 +125,36 @@ export default {
   watch: {
     curentFilter(filter) {
       this.masters = []
+      this.lastFirebaseDoc = null
 
-      if (filter === 'all') {
-        this.loadMasters('all')
-      } else {
-        this.loadMasters(filter)
-      }
+      this.loadMasters(filter)
     }
   },
   mounted() {
+    document.addEventListener('scroll', this.checkScroll)
+
     this.loadMasters('all')
   },
+  destroyed() {
+    document.removeEventListener('scroll', this.checkScroll)
+  },
   methods: {
+    // Подгрузка заявок при скроле
+    checkScroll() {
+      if (!this.loading || this.mastersAppending) {
+        return
+      }
+      
+      // 250px - высота прлоудера
+      if (
+          document.documentElement.scrollTop +
+          document.documentElement.clientHeight > 
+          document.documentElement.scrollHeight - 250
+        ) {
+          this.loadMasters(this.curentFilter)
+      }
+    },
+
     // Перейти на сраницу мастера
     goToMaster(id) {
       this.$router.push({ name: 'master', params: { id } })
@@ -146,16 +178,35 @@ export default {
     // Загрузить список мастеров
     loadMasters(filter) {
       this.loading = true
+      this.mastersAppending = true
 
+      // Фильтр по типу пользователя - только мастера
       let mastersFromDB = db.collection('users')
         .where('accountType', '==', 'master')
-
+      
+      // Если выбрана категория фильтруем по ней
       if (filter !== 'all') {
         mastersFromDB = mastersFromDB.where(`category.${filter}`, '==', true)
       }
 
-      mastersFromDB.get()
+      // Если уже были загружены мастера начинаем поиск с последнего документа
+      if (this.lastFirebaseDoc) {
+        mastersFromDB = mastersFromDB.startAfter(this.lastFirebaseDoc)
+      }
+
+      // Ограничение по количеству
+      mastersFromDB = mastersFromDB.limit(this.limit)
+
+      mastersFromDB
+        .get()
         .then(querySnaphot => {
+          this.lastFirebaseDoc = querySnaphot.docs[querySnaphot.docs.length - 1]
+
+          // Если заявок меньше чем значение limit значит это последняя страница
+          if (querySnaphot.docs.length < this.limit) {
+            this.lastFirebaseDoc = null
+          }
+
           querySnaphot.forEach(doc => {
             let master = {
               id: doc.id,
@@ -173,7 +224,12 @@ export default {
             this.masters.push(master)
           })
 
-          this.loading = false
+          // Если lastFirebaseDoc ложно - загружены все данные
+          if (!this.lastFirebaseDoc) {
+            this.loading = false
+          }
+
+          this.mastersAppending = false
         })
         .catch(error => this.$vs.notify({
           title: 'Ошибка при загрузке мастеров!',
